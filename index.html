@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog Gabungan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+	   
+    }
+
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+
+    /* === HALAMAN 1 (timeline vertikal, full hitam, garis di tengah) === */
+    .timeline-page {
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .timeline-page h1 {
+      text-align: center;
+      font-size: 48px;
+    }
+
+    .timeline-page p {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 50px;
+    }
+
+    .timeline {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+	
+	
+
+
+
+    /* Garis vertikal di tengah antara tanggal & teks */
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 150px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #888;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 50px;
+      cursor: pointer;
+    }
+
+    .timeline-date {
+      flex: 0 0 130px;
+      text-align: right;
+      margin-right: 20px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .timeline-content {
+      flex: 1;
+      padding-left: 40px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    /* === HALAMAN 2 PERSIS ASLI === */
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      position: relative;
+      color: #333;
+      background: #fff;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      left: 120px;
+      top: 80px;
+      bottom: 0;
+      width: 2px;
+      background: #ccc;
+      z-index: 0;
+    }
+
+    .entry {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+      margin-bottom: 60px;
+    }
+
+    .entry .judul {
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .right-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px; /* jarak antara judul dan konten */
+      max-width: 500px;
+    }
+
+    .date {
+      font-size: 14px;
+      font-weight: normal;
+      color: #666;              /* warna abu muda */
+      text-align: left;         /* rata kiri */
+      padding-right: 0;
+      margin-left: 0;
+      margin-top: 0px;
+      white-space: nowrap;      /* tetap satu baris */
+      display: flex;
+      align-items: center;
+      gap: 6px;                 /* jarak antara icon dan teks */
+    }
+
+    .date img {
+      width: 50px;
+      height: 50px;
+      margin-right: 6px;
+    }
+
+    .line {
+      height: 2px;
+      background: #ccc;
+      flex-grow: 1;
+      margin-top: 14px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .content {
+      background: #f9f9f9;
+      padding: 12px 16px;
+      border-radius: 6px;
+      max-width: 500px;
+    }
+
+    .content img {
+      max-width: 100%;
+      margin-top: 8px;
+      border-radius: 6px;
+    }
+
+    ul {
+      padding-left: 16px;
+      margin: 10px 0 0 0;
+    }
+
+    li {
+      margin: 10px 0;
+      font-size: 28px;
+    }
+
+    h1 {
+      margin-left: 160px;
+      font-size: 40px;
+    }
+	
+	
+
+    .back-btn {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 8px 16px;
+      background: #007BFF;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    
+    .judul {
+      font-weight: bold;
+      font-size: 18px;
+      margin: 8px 0;
+      color: #333;
+    }
+
+    .label-new-inline {
+      background-color: blue;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 10px;
+      display: inline-block;
+    }
+
+    .image-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .image-row img {
+      width: 100%;
+      max-width: 250px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: transform 0.2s;
+    }
+
+    .image-row img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Overlay fullscreen */
+    .fullscreen-overlay {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .fullscreen-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #fff;
+      cursor: pointer;
+    }
+
+    /* Gaya komentar yang diperbarui */
+    .comment-section {
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    .comment-section h4 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .comment-form {
+      margin-bottom: 15px;
+    }
+
+    .comment-form input,
+    .comment-form textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .comment-form button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .comment-form button:hover {
+      background: #0056b3;
+    }
+
+    .comments-list {
+      width: 100%;
+    }
+
+    .comment {
+      position: relative;
+      margin-bottom: 15px;
+      padding-left: 20px;
+      border-left: 2px solid #007BFF;
+    }
+
+    .comment::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: 20px;
+      bottom: -15px;
+      width: 2px;
+      background: #007BFF;
+      z-index: -1;
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .comment-name {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .comment-time {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .comment-text {
+      margin-bottom: 5px;
+    }
+
+    .comment-actions {
+      margin-top: 5px;
+    }
+
+    .reply-btn {
+      background: none;
+      border: none;
+      color: #007BFF;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+    }
+
+    .replies {
+      margin-left: 20px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .replies::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ddd;
+    }
+
+    /* Gaya khusus untuk halaman 1 */
+    .timeline-page .comment-section {
+      background: #111;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+
+    .timeline-page .comment-form input,
+    .timeline-page .comment-form textarea {
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+    }
+
+    .timeline-page .comment {
+      color: #fff;
+      border-left-color: #4CAF50;
+    }
+
+    .timeline-page .comment::before {
+      background: #4CAF50;
+    }
+
+    .timeline-page .comment-time {
+      color: #aaa;
+    }
+
+    .timeline-page .reply-btn {
+      color: #4CAF50;
+    }
+
+    .timeline-page .replies::before {
+      background: #4CAF50;
+    }
+	
+	 h4 {
+      margin-right: 30px;
+      font-size: 29px;
+    }
+	
+	
+	.comment-count {
+    background-color: #007BFF;
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+    display: inline-block;
+  }
+
+  .timeline-page .comment-count {
+    background-color: #4CAF50;
+  }
+	
+	
+	.support-section {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.view-count {
+  margin-bottom: 5px;
+}
+
+.like-btn {
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.like-btn:hover {
+  background-color: #e6b800;
+}
+
+	
+	.contact-links {
+  background: #fff;
+  color: #000;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-links p {
+  font-size: 16px;
+  max-width: 700px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 20px;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.contact-item span {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.contact-item a {
+  color: #000;
+  font-size: 18px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact-item a svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+  stroke: #000;
+  flex-shrink: 0;
+}
+
+	
+	
+	
+.contact-dark {
+  background: #000;          
+  color: #fff;               
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-dark p {
+  font-size: 16px;
+  text-align: center;
+  max-width: 700px;
+  margin-bottom: 30px;
+  color: #cfcfcf;
+}
+
+.contact-dark .contact-item {
+  background: #111;          
+  border: 1px solid #333;
+  color: #fff;
+}
+
+.contact-dark .contact-item span { color: #999; }
+.contact-dark .contact-item a  { color: #fff; }
+.contact-dark .contact-item a svg { stroke: #fff; }
+	
+	
+	
+	
+	
+	#contact-hover-banner {
+  transition: opacity 0.3s ease;
+}
+
+
+
+
+	#lokasi-info {
+  text-align: right; /* Rata kanan di dalam bloknya */
+  margin: 20px 40px 0 0; /* Jarak dari atas & kanan */
+  font-size: 16px;
+  color: black;
+   background: red;
+}
+
+	
+	.back-btn-custom {
+  position: fixed;  /* tetap di sudut atas saat scroll */
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  color: #000;       /* warna hitam */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.back-btn-custom svg {
+  width: 30px;
+  height: 30px;
+}
+
+.fullscreen-content {
+  display: flex;
+  max-width: 90%;
+  max-height: 90%;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.fullscreen-content img {
+  max-width: 60%;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.image-comment-section {
+  width: 40%;
+  min-width: 300px;
+  padding: 20px;
+  background: #f5f5f5;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+/* Untuk dark mode */
+.timeline-page .fullscreen-content {
+  background: #222;
+}
+
+.timeline-page .image-comment-section {
+  background: #333;
+  color: #fff;
+}
+
+.timeline-page .comment-form input,
+.timeline-page .comment-form textarea {
+  background: #444;
+  color: #fff;
+  border: 1px solid #666;
+}
+	
+	
+	
+	
+  </style>
+</head>
+<body>
+ <div class="fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreen(event)">
+  <div class="fullscreen-content" onclick="event.stopPropagation()">
+    <img id="fullscreenImage" src="" alt="Fullscreen">
+    <div class="image-comment-section">
+      <div class="comments-list" id="fullscreen-comments"></div>
+      <form class="comment-form" onsubmit="submitFullscreenComment(event)">
+        <input type="text" name="name" placeholder="Nama" required>
+        <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+        <input type="hidden" name="parentId" value="">
+        <button type="submit">Kirim</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+  <div id="contact-hover-banner" style="
+ transition: opacity 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -150%);
+  background-color: #333;
+  color: #000; /* ✅ warna teks jadi hitam */
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 9999;
+  pointer-events: none;
+  display: none;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;">
+</div>
+
+
+  
+<p id="lokasi-info" style="text-align:center; color: black; font-size:29px; margin-bottom:20px;">
+    Mendeteksi lokasi...
+  </p>
+
+  <!-- === HALAMAN 1 === -->
+  <div class="page timeline-page active" id="page1">
+    <h1>Website Changelog Note Farid 2025</h1>
+    <p>Kami akan membagikan daftar pembaruan, peningkatan, dan perbaikan yang dilakukan pada situs web note farid. Pantau terus.</p>
+    <div class="timeline" id="timeline"></div>
+	
+	
+	
+	
+	
+	<div class="contact-dark">
+  <p>Kamu bisa melihat aktivitas saya, sesuai dengan apa yang kamu inginkan.</p>
+
+  <div class="contact-item">
+    <span>@fardardinsyh</span>
+    <a href="https://instagram.com/fardardinsyh" target="_blank">
+      Instagram
+      <svg viewBox="0 0 34 34"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+  <div class="contact-item">
+    <span>@github_user</span>
+    <a href="https://github.com/" target="_blank">
+      Github
+      <svg viewBox="0 0 34 34"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+  <div class="contact-item">
+    <span>LinkedIn Farid</span>
+    <a href="https://linkedin.com/in/your-profile" target="_blank">
+      Linkedin
+      <svg viewBox="0 0 34 34"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+  <div class="contact-item">
+    <span>Behance Farid</span>
+    <a href="https://behance.net/your-profile" target="_blank">
+      Behance
+      <svg viewBox="0 0 34 34"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+  <div class="contact-item">
+    <span>faridardiansyah061@gmail.com</span>
+    <a href="mailto:faridardiansyah061@gmail.com">
+      Email
+      <svg viewBox="0 0 34 34"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+</div>
+
+<div id="contact-response" style="display:none; margin-top: 30px; padding: 20px; border-radius: 10px; text-align:center; font-size: 18px; font-weight: bold;"></div>
+  </div>
+  
+ 
+ 
+ <!-- === HALAMAN 2 === -->
+<div class="page" id="page2">
+  <div class="container">
+    <h1>Changelog</h1>
+
+<a href="#" class="back-btn-custom" onclick="showPage('page1')">
+  <svg viewBox="0 0 24 24" width="24" height="24">
+    <path d="M19 12H5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Back
+</a>
+
+ 
+
+    <!-- Entry 0 -->
+    <div class="entry" id="entry-0">
+      <div class="date"><img src="images/5.jpg" alt="icon"> 29 Jun, 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Website Changelog page selesai dibikin 2025 <span class="label-new-inline">NEW</span></div>
+        <div class="content">
+          <ul>
+            <li>Halaman changelog sudah selesai dibikin, Kami akan membagikan daftar pembaruan, peningkatan, dan perbaikan yang dilakukan pada situs web note farid. Pantau terus!</li>
+          </ul>
+        </div>
+		<div class="support-section" data-id="page2-entry-0">
+  <div class="view-count">👁️ <span class="view-num">0</span> tayangan</div>
+  <button class="like-btn">👍 Dukung Naik (<span class="like-num">0</span>)</button>
+</div>
+
+		<div class="comment-section" data-entry="page2-entry-0">
+          <h4>Komentar</h4>
+		  <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-0', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+          <div class="comments-list" id="comments-page2-entry-0"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 1 -->
+    <div class="entry" id="entry-1">
+      <div class="date"><img src="images/5.jpg" alt="icon"> 2 Jul, 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Website Changelog Note Farid aktif secara online </div>
+        <div class="content">
+          <ul>
+            <li>Website Changelog Note Farid sudah didomain secara online, kamu bisa pantau terus secara update disini!</li>
+          </ul>
+        </div>
+		<div class="comment-section" data-entry="page2-entry-1">
+          <h4>Komentar</h4>
+		  <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-1', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+		  <div class="comments-list" id="comments-page2-entry-1"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 2 -->
+    <div class="entry" id="entry-2">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+		<div class="comment-section" data-entry="page2-entry-2">
+          <h4>Komentar</h4>
+		  <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-2', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+		  <div class="comments-list" id="comments-page2-entry-2"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 3 -->
+    <div class="entry" id="entry-3">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+		<div class="comment-section" data-entry="page2-entry-3">
+          <h4>Komentar</h4>
+		  <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-3', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+          <div class="comments-list" id="comments-page2-entry-3"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 4 -->
+    <div class="entry" id="entry-4">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+        <div class="comment-section" data-entry="page2-entry-4">
+          <h4>Komentar</h4>
+ <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-4', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+          <div class="comments-list" id="comments-page2-entry-4"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 5 -->
+    <div class="entry" id="entry-5">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+        <div class="comment-section" data-entry="page2-entry-5">
+          <h4>Komentar</h4>
+           <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-5', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+          <div class="comments-list" id="comments-page2-entry-5"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 6 -->
+    <div class="entry" id="entry-6">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+         <div class="comment-section" data-entry="page2-entry-6">
+          <h4>Komentar</h4>
+           <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-6', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+          <div class="comments-list" id="comments-page2-entry-6"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 7 -->
+    <div class="entry" id="entry-7">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+        <div class="comment-section" data-entry="page2-entry-7">
+          <h4>Komentar</h4>
+            <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-7', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+          <div class="comments-list" id="comments-page2-entry-7"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 8 -->
+    <div class="entry" id="entry-8">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+        <div class="comment-section" data-entry="page2-entry-8">
+          <h4>Komentar</h4>
+          <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-8', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+            <div class="comments-list" id="comments-page2-entry-8"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 9 -->
+    <div class="entry" id="entry-9">
+      <div class="date"><img src="images/5.jpg" alt="icon"> , 2025</div>
+      <div class="line"></div>
+      <div class="right-content">
+        <div class="judul">Tidak Tersedia</div>
+        <div class="content">
+          <ul>
+            <li>Tidak Tersedia.</li>
+          </ul>
+        </div>
+         <div class="comment-section" data-entry="page2-entry-9">
+          <h4>Komentar</h4>
+           <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-9', 'page2')">
+            <input type="text" placeholder="Nama" name="name" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+             <div class="comments-list" id="comments-page2-entry-9"></div>
+        </div>
+        <div class="image-row">
+          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
+          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="contact-links">
+  <p>Kamu bisa melihat aktivitas saya, sesuai dengan apa yang kamu inginkan.</p>
+
+  <div class="contact-item">
+    <span>@fardardinsyh</span>
+    <a href="https://instagram.com/fardardinsyh" target="_blank">
+       Instagram
+      <svg viewBox="0 0 24 24"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+  <div class="contact-item">
+    <span></span>
+    <a href="https://github.com/" target="_blank">
+      Github
+      <svg viewBox="0 0 24 24"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+   <div class="contact-item">
+    <span>LinkedIn Farid</span>
+    <a href="https://linkedin.com/in/your-profile" target="_blank">
+      Linkedin
+      <svg viewBox="0 0 24 24"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+  <div class="contact-item">
+    <span>Behance Farid</span>
+    <a href="https://behance.net/your-profile" target="_blank">
+      Behance
+      <svg viewBox="0 0 24 24"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+
+  <div class="contact-item">
+    <span>faridardiansyah061@gmail.com</span>
+    <a href="mailto:faridardiansyah061@gmail.com">
+      Email
+      <svg viewBox="0 0 24 24"><path d="M5 19L19 5M19 5H8M19 5V16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </a>
+  </div>
+</div>
+ 
+ <p id="lokasi-info" style="text-align:center; color: black; font-size:29px; margin-bottom:20px;">
+    Mendeteksi lokasi...
+  </p>
+
+ 
+
+ 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp, orderBy, doc, getDoc, updateDoc, increment, setDoc  } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+  // Konfigurasi Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCZnFwlT36_JlJ7SOS9p88n3A9BH9FmbNo",
+    authDomain: "changelog-89294.firebaseapp.com",
+    projectId: "changelog-89294",
+    storageBucket: "changelog-89294.firebasestorage.app",
+    messagingSenderId: "638362451511",
+    appId: "1:638362451511:web:3b9a6051065940f82709b2"
+  };
+
+  // Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const changelog = [
+    { date: '29 Jun, 2025', content: 'Website Changelog page selesai dibikin 2025' },
+    { date: '2 Juul, 2025', content: 'Website Changelog Note Farid aktif secara online' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+    { date: ', 2025', content: 'Tidak Tersedia' },
+  ];
+
+  const timelineContainer = document.getElementById('timeline');
+
+  // Format waktu
+  function formatTime(timestamp) {
+    if (!timestamp) return '';
+    const date = timestamp.toDate();
+    return date.toLocaleString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  
+  
+  
+  
+ // Fungsi untuk memuat komentar - DIMODIFIKASI
+function loadComments(entryId) {
+  const q = query(
+    collection(db, "comments"),
+    where("entryId", "==", entryId),
+    orderBy("timestamp", "asc")
+  );
+
+  onSnapshot(q, (snapshot) => {
+    const comments = {};
+    let totalComments = 0;
+    
+    snapshot.forEach(doc => {
+      const c = { id: doc.id, ...doc.data() };
+      comments[c.id] = c;
+      c.replies = [];
+      totalComments++;
+    });
+
+    // Kelompokkan balasan
+    Object.values(comments).forEach(c => {
+      if (c.parentId && comments[c.parentId]) {
+        comments[c.parentId].replies.push(c);
+      }
+    });
+
+    // Update comment count in all matching sections
+    const commentSections = document.querySelectorAll(`.comment-section[data-entry="${entryId}"], .comment-section[data-entry="entry-${entryId.split('-')[2]}"]`);
+    
+    commentSections.forEach(section => {
+      // Cari atau buat elemen count
+      let countElement = section.querySelector('.comment-count');
+      if (!countElement) {
+        const h4 = section.querySelector('h4');
+        if (h4) {
+          countElement = document.createElement('span');
+          countElement.className = 'comment-count';
+          h4.appendChild(countElement);
+        }
+      }
+      
+      if (countElement) {
+        countElement.textContent = totalComments;
+      }
+    });
+
+    // Render komentar ke container yang sesuai
+    const containers = document.querySelectorAll(`.comments-list[id="comments-${entryId}"], .comments-list[id="comments-entry-${entryId.split('-')[2]}"]`);
+    containers.forEach(container => renderComments(container, comments));
+  });
+}
+
+
+// Hitung dan tampilkan tayangan & like
+function setupEntryStats(entryId) {
+  const viewEl = document.querySelector(`.support-section[data-id="${entryId}"] .view-num`);
+  const likeEl = document.querySelector(`.support-section[data-id="${entryId}"] .like-num`);
+  const likeBtn = document.querySelector(`.support-section[data-id="${entryId}"] .like-btn`);
+
+  const statRef = doc(db, "entryStats", entryId);
+
+  // Tambah 1 tayangan (sekali load)
+  updateDoc(statRef, {
+    views: increment(1)
+  }).catch(async () => {
+    await setDoc(statRef, { views: 1, likes: 0 }, { merge: true });
+  });
+
+  // Pantau real-time
+  onSnapshot(statRef, (docSnap) => {
+    const data = docSnap.data();
+    if (data) {
+      if (viewEl) viewEl.textContent = data.views || 0;
+      if (likeEl) likeEl.textContent = data.likes || 0;
+    }
+  });
+
+  // Tangani klik dukungan
+  if (likeBtn) {
+    likeBtn.addEventListener("click", async () => {
+      await updateDoc(statRef, {
+        likes: increment(1)
+      }).catch(() => {
+        setDoc(statRef, { views: 1, likes: 1 }, { merge: true });
+      });
+    });
+  }
+}
+  
+  
+ 
+  
+  // Fungsi untuk submit komentar - PERBAIKAN
+  window.submitComment = async function(e, entryId, pageId) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const form = e.target;
+    const name = form.name.value.trim();
+    const text = form.text.value.trim();
+    const parentId = form.parentId.value || null;
+
+    if (name && text) {
+      try {
+        await addDoc(collection(db, "comments"), {
+          entryId,
+          name,
+          text,
+          parentId,
+          timestamp: serverTimestamp()
+        });
+        
+        form.reset();
+        form.parentId.value = "";
+        form.text.placeholder = "Tulis komentar...";
+        
+        // Tidak perlu mengubah halaman setelah submit
+      } catch (error) {
+        console.error("Error adding comment: ", error);
+        alert("Gagal mengirim komentar. Silakan coba lagi.");
+      }
+    }
+  };
+
+  // Render komentar ke container
+  function renderComments(container, comments) {
+    container.innerHTML = "";
+    
+    // Render komentar utama (yang bukan balasan)
+    Object.values(comments).forEach(c => {
+      if (!c.parentId) {
+        container.appendChild(renderComment(c, comments));
+      }
+    });
+  }
+
+  // Fungsi untuk render komentar individual
+  function renderComment(comment, allComments) {
+    const div = document.createElement("div");
+    div.className = "comment";
+    
+    div.innerHTML = `
+      <div class="comment-header">
+        <span class="comment-name">${comment.name}</span>
+        <span class="comment-time">${formatTime(comment.timestamp)}</span>
+      </div>
+      <div class="comment-text">${comment.text}</div>
+      <div class="comment-actions">
+        <button class="reply-btn" data-comment-id="${comment.id}" data-entry-id="${comment.entryId}">Balas</button>
+      </div>
+    `;
+
+    // Tambahkan container untuk balasan
+    const repliesContainer = document.createElement("div");
+    repliesContainer.className = "replies";
+    div.appendChild(repliesContainer);
+
+    // Render balasan
+    if (comment.replies && comment.replies.length > 0) {
+      comment.replies.forEach(reply => {
+        repliesContainer.appendChild(renderComment(reply, allComments));
+      });
+    }
+
+    return div;
+  }
+
+  // Fungsi untuk menangani klik tombol balas
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('reply-btn')) {
+      e.stopPropagation();
+      const commentId = e.target.getAttribute('data-comment-id');
+      const entryId = e.target.getAttribute('data-entry-id');
+      
+      // Temukan semua form komentar untuk entry ini
+      const forms = document.querySelectorAll(`.comment-section[data-entry*="${entryId.split('-')[1]}"] .comment-form`);
+      
+      forms.forEach(form => {
+        const textArea = form.querySelector('textarea[name="text"]');
+        const parentInput = form.querySelector('input[name="parentId"]');
+        
+        if (parentInput && textArea) {
+          parentInput.value = commentId;
+          textArea.placeholder = "Tulis balasan...";
+          textArea.focus();
+          
+          // Scroll ke form
+          form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    }
+  });
+
+  // Buat timeline items
+  changelog.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'timeline-item';
+	const entryId = `page1-entry-${index}`; // ✅ Benar
+
+    div.innerHTML = `
+      <div class="timeline-date">${item.date}</div>
+      <div class="timeline-content">
+        ${item.content}
+        <div class="comment-section" data-entry="${entryId}">
+          <h4 style="margin-top:15px;">Komentar</h4>
+          <form class="comment-form" onsubmit="submitComment(event, '${entryId}', 'page1')">
+            <input type="text" name="name" placeholder="Nama" required>
+            <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+            <input type="hidden" name="parentId" value="">
+            <button type="submit">Kirim</button>
+          </form>
+          <div class="comments-list" id="comments-${entryId}"></div>
+        </div>
+      </div>
+    `;
+
+    // Event handler untuk navigasi
+    div.addEventListener('click', (event) => {
+      if (!event.target.closest('form') && 
+          !event.target.closest('.comments-list') && 
+          !event.target.classList.contains('reply-btn')) {
+        showPage('page2');
+        setTimeout(() => {
+          const target = document.getElementById(entryId);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    });
+
+    timelineContainer.appendChild(div);
+    loadComments(entryId);
+  });
+
+  // Fungsi untuk menampilkan halaman
+  window.showPage = function(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+  };
+
+  // Fungsi untuk gambar fullscreen
+  window.openFullscreen = function(img) {
+    const overlay = document.getElementById('fullscreenOverlay');
+    const fullscreenImage = document.getElementById('fullscreenImage');
+    fullscreenImage.src = img.src;
+    overlay.style.display = 'flex';
+  };
+
+  window.closeFullscreen = function() {
+    document.getElementById('fullscreenOverlay').style.display = 'none';
+  };
+  
+  // Muat komentar untuk semua entri di halaman 2
+  for (let i = 0; i < changelog.length; i++) {
+  loadComments(`page2-entry-${i}`);
+    setupEntryStats(`page2-entry-${i}`); // Tambahkan ini
+  }
+  
+  
+  const contactHoverData = {
+  instagram: { color: "#7FFF00", text: "Instagram saya — Update terbaru!" },
+  github:  { color: "#ADFF2F", text: "GitHub saya — Lihat kode saya!" },
+  linkedin:{ color: "#7CFC00", text: "LinkedIn saya — Hubungkan secara profesional." },
+  behance: { color: "#00FF00", text: "Behance saya — Hasil belajar illustration character." },
+  email:   { color: "#FFFF00", text: "Email saya — Kirim pesan langsung!" }
+};
+
+const hoverBanner = document.getElementById("contact-hover-banner");
+
+document.querySelectorAll(".contact-item a").forEach(link => {
+  const href = link.getAttribute("href") || "";
+  let platform = "";
+
+  if (href.includes("instagram")) platform = "instagram";
+  else if (href.includes("github")) platform = "github";
+  else if (href.includes("linkedin")) platform = "linkedin";
+  else if (href.includes("behance")) platform = "behance";
+  else if (href.includes("mailto")) platform = "email";
+
+  if (platform && contactHoverData[platform]) {
+    const { color, text } = contactHoverData[platform];
+
+    link.addEventListener("mouseenter", () => {
+      hoverBanner.textContent = text;
+      hoverBanner.style.backgroundColor = color;
+      hoverBanner.style.display = "block";
+      hoverBanner.style.opacity = "1";
+    });
+
+    link.addEventListener("mousemove", (e) => {
+      hoverBanner.style.left = `${e.clientX}px`;
+      hoverBanner.style.top = `${e.clientY}px`;
+    });
+
+    link.addEventListener("mouseleave", () => {
+      hoverBanner.style.opacity = "0";
+      setTimeout(() => {
+        hoverBanner.style.display = "none";
+      }, 200);
+    });
+  }
+});
+
+  
+  
+function detectLocation() {
+  const lokasiEl = document.getElementById("lokasi-info");
+  if (!lokasiEl) return; // stop kalau elemen tidak ada
+
+  if (navigator.geolocation) {
+    lokasiEl.textContent = "Mencoba mendeteksi lokasi...";
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+  } else {
+    lokasiEl.textContent = "Browser tidak mendukung Geolocation.";
+  }
+}
+
+function showPosition(position) {
+  const lat = position.coords.latitude.toFixed(4);
+  const lon = position.coords.longitude.toFixed(4);
+  document.getElementById("lokasi-info").textContent = `Lokasi perkiraan: Latitude ${lat}, Longitude ${lon}`;
+}
+
+function showError(error) {
+  const lokasiEl = document.getElementById("lokasi-info");
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      lokasiEl.textContent = "Izin lokasi ditolak.";
+      break;
+    case error.POSITION_UNAVAILABLE:
+      lokasiEl.textContent = "Informasi lokasi tidak tersedia.";
+      break;
+    case error.TIMEOUT:
+      lokasiEl.textContent = "Permintaan lokasi melebihi waktu tunggu.";
+      break;
+    default:
+      lokasiEl.textContent = "Terjadi kesalahan saat mendeteksi lokasi.";
+  }
+}
+
+// Jalankan saat window selesai load
+window.addEventListener("load", detectLocation);
+
+  
+  
+  // Modifikasi fungsi openFullscreen
+window.openFullscreen = function(img) {
+  const overlay = document.getElementById('fullscreenOverlay');
+  const fullscreenImage = document.getElementById('fullscreenImage');
+  fullscreenImage.src = img.src;
+  overlay.style.display = 'flex';
+  
+  // Load komentar untuk gambar ini (gunakan ID unik berdasarkan src gambar)
+  const imageId = 'image-' + encodeURIComponent(img.src);
+  loadImageComments(imageId);
+};
+
+// Fungsi untuk memuat komentar gambar
+function loadImageComments(imageId) {
+  const q = query(
+    collection(db, "imageComments"),
+    where("imageId", "==", imageId),
+    orderBy("timestamp", "asc")
+  );
+
+  onSnapshot(q, (snapshot) => {
+    const comments = {};
+    snapshot.forEach(doc => {
+      const c = { id: doc.id, ...doc.data() };
+      comments[c.id] = c;
+      c.replies = [];
+    });
+
+    // Kelompokkan balasan
+    Object.values(comments).forEach(c => {
+      if (c.parentId && comments[c.parentId]) {
+        comments[c.parentId].replies.push(c);
+      }
+    });
+
+    // Render komentar
+    const container = document.getElementById('fullscreen-comments');
+    container.innerHTML = "";
+    
+    Object.values(comments).forEach(c => {
+      if (!c.parentId) {
+        container.appendChild(renderImageComment(c, comments));
+      }
+    });
+  });
+}
+
+// Fungsi render komentar untuk gambar
+function renderImageComment(comment) {
+  const div = document.createElement("div");
+  div.className = "comment";
+  
+  const timeAgo = formatTimeAgo(comment.timestamp);
+  
+  div.innerHTML = `
+    <div class="comment-header">
+      <span class="comment-name">${comment.name}</span>
+      <span class="comment-time">${timeAgo}</span>
+    </div>
+    <div class="comment-text">${comment.text}</div>
+    <div class="comment-actions">
+      <button class="reply-btn" data-comment-id="${comment.id}">Balas</button>
+    </div>
+  `;
+
+  if (comment.replies && comment.replies.length > 0) {
+    const repliesContainer = document.createElement("div");
+    repliesContainer.className = "replies";
+    comment.replies.forEach(reply => {
+      repliesContainer.appendChild(renderImageComment(reply));
+    });
+    div.appendChild(repliesContainer);
+  }
+
+  return div;
+}
+
+// Fungsi format waktu "x menit/jam/hari yang lalu"
+function formatTimeAgo(timestamp) {
+  if (!timestamp) return '';
+  const now = new Date();
+  const date = timestamp.toDate();
+  const seconds = Math.floor((now - date) / 1000);
+  
+  let interval = Math.floor(seconds / 31536000);
+  if (interval >= 1) return `${interval} tahun yang lalu`;
+  
+  interval = Math.floor(seconds / 2592000);
+  if (interval >= 1) return `${interval} bulan yang lalu`;
+  
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) return `${interval} hari yang lalu`;
+  
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1) return `${interval} jam yang lalu`;
+  
+  interval = Math.floor(seconds / 60);
+  if (interval >= 1) return `${interval} menit yang lalu`;
+  
+  return 'Baru saja';
+}
+
+// Fungsi submit komentar gambar
+window.submitFullscreenComment = async function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  const form = e.target;
+  const name = form.name.value.trim();
+  const text = form.text.value.trim();
+  const parentId = form.parentId.value || null;
+  const imageId = 'image-' + encodeURIComponent(document.getElementById('fullscreenImage').src);
+
+  if (name && text) {
+    try {
+      await addDoc(collection(db, "imageComments"), {
+        imageId,
+        name,
+        text,
+        parentId,
+        timestamp: serverTimestamp()
+      });
+      
+      form.reset();
+      form.parentId.value = "";
+    } catch (error) {
+      console.error("Error adding comment: ", error);
+      alert("Gagal mengirim komentar. Silakan coba lagi.");
+    }
+  }
+};
+
+// Tangani klik tombol balas di komentar gambar
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('reply-btn') && e.target.closest('#fullscreen-comments')) {
+    e.stopPropagation();
+    const commentId = e.target.getAttribute('data-comment-id');
+    const form = document.querySelector('#fullscreenOverlay .comment-form');
+    
+    if (form) {
+      const textArea = form.querySelector('textarea[name="text"]');
+      const parentInput = form.querySelector('input[name="parentId"]');
+      
+      parentInput.value = commentId;
+      textArea.placeholder = "Tulis balasan...";
+      textArea.focus();
+    }
+  }
+});
+
+window.closeFullscreen = function(e) {
+  // Hanya tutup jika klik di luar konten
+  if (e.target === document.getElementById('fullscreenOverlay')) {
+    document.getElementById('fullscreenOverlay').style.display = 'none';
+    document.getElementById('fullscreen-comments').innerHTML = '';
+  }
+};
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </script>
+</body>
+</html>
