@@ -1118,7 +1118,7 @@
 
   const changelog = [
     { date: '29 Jun, 2025', content: 'Website Changelog page selesai dibikin 2025' },
-    { date: '2 Juul, 2025', content: 'Website Changelog Note Farid aktif secara online' },
+    { date: '2 Jul, 2025', content: 'Website Changelog Note Farid aktif secara online' },
     { date: ', 2025', content: 'Tidak Tersedia' },
     { date: ', 2025', content: 'Tidak Tersedia' },
     { date: ', 2025', content: 'Tidak Tersedia' },
@@ -1516,19 +1516,18 @@ window.addEventListener("load", detectLocation);
     const comments = {};
     let commentCount = 0;
 
-    snapshot.forEach(doc => {
-      const c = { id: doc.id, ...doc.data() };
-      comments[c.id] = c;
-      c.replies = [];
-      if (!c.parentId) commentCount++;
-    });
+  snapshot.forEach(doc => {
+  const c = { id: doc.id, ...doc.data(), replies: [] };
+  comments[c.id] = c;
+  if (!c.parentId) commentCount++;
+});
 
-    // Kelompokkan balasan
-    Object.values(comments).forEach(c => {
-      if (c.parentId && comments[c.parentId]) {
-        comments[c.parentId].replies.push(c);
-      }
-    });
+// Setelah semua komentar dibuat
+Object.values(comments).forEach(c => {
+  if (c.parentId && comments[c.parentId]) {
+    comments[c.parentId].replies.push(c);
+  }
+});
 
     // Tampilkan jumlah komentar
     countEl.textContent = commentCount;
@@ -1551,47 +1550,6 @@ window.addEventListener("load", detectLocation);
  
  
  
- function renderImageComment(comment, allComments) {
-  const div = document.createElement("div");
-  div.className = "comment";
-
-  div.innerHTML = `
-    <div class="comment-header">
-      <span class="comment-name">${comment.name}</span>
-      <span class="comment-time">${formatTimeAgo(comment.timestamp)}</span>
-    </div>
-    <div class="comment-text">${comment.text}</div>
-    <div class="comment-actions">
-      <button class="reply-btn" data-comment-id="${comment.id}">Balas</button>
-    </div>
-  `;
-
-  const repliesContainer = document.createElement("div");
-  repliesContainer.className = "replies";
-  div.appendChild(repliesContainer);
-
-  if (comment.replies && comment.replies.length > 0) {
-    comment.replies.forEach(reply => {
-      repliesContainer.appendChild(renderImageComment(reply, allComments));
-    });
-  }
-
-  return div;
-}
-
- 
- 
- 
- 
-
-
-
-
-
-
-
-
-
 
 // Fungsi format waktu "x menit/jam/hari yang lalu"
 function formatTimeAgo(timestamp) {
@@ -1620,15 +1578,6 @@ function formatTimeAgo(timestamp) {
 
 
 
-
-
-
-
-
-
-
-
-
 window.submitFullscreenComment = async function(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -1648,12 +1597,10 @@ window.submitFullscreenComment = async function(e) {
         timestamp: serverTimestamp()
       });
       
-      // Reset form setelah submit
+      // Reset form after submission
       form.reset();
       form.parentId.value = "";
       form.text.placeholder = "Tulis komentar...";
-      
-      // Tidak perlu memuat ulang komentar karena onSnapshot akan menangani update
     } catch (error) {
       console.error("Error adding comment: ", error);
       alert("Gagal mengirim komentar. Silakan coba lagi.");
@@ -1662,25 +1609,7 @@ window.submitFullscreenComment = async function(e) {
 };
 
 
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('reply-btn') && e.target.closest('#fullscreen-comments')) {
-    e.stopPropagation();
-    const commentId = e.target.getAttribute('data-comment-id');
-    const form = document.querySelector('#fullscreenOverlay .comment-form');
-    
-    if (form) {
-      const textArea = form.querySelector('textarea[name="text"]');
-      const parentInput = form.querySelector('input[name="parentId"]');
-      
-      parentInput.value = commentId;
-      textArea.placeholder = "Tulis balasan...";
-      textArea.focus();
-      
-      // Scroll ke form
-      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }
-});
+
 
 
 
@@ -1702,17 +1631,26 @@ window.openFullscreen = function(img) {
   overlay.style.display = 'flex';
 
   currentImageId = img.getAttribute('data-id');
-  localStorage.setItem('lastImageId', currentImageId); // ✅ simpan sementara
+  localStorage.setItem('lastImageId', currentImageId);
 
-  loadImageComments(currentImageId);
-
+  // Reset comment form
   const form = document.querySelector('#fullscreenOverlay .comment-form');
   if (form) {
     form.reset();
     form.parentId.value = "";
     form.text.placeholder = "Tulis komentar...";
   }
+
+  loadImageComments(currentImageId);
 };
+
+
+
+
+
+
+
+
 
 
 
@@ -1729,13 +1667,59 @@ window.addEventListener("load", () => {
 });
 
 
+function renderImageComment(comment, allComments) {
+  const div = document.createElement("div");
+  div.className = "comment";
+  
+  div.innerHTML = `
+    <div class="comment-header">
+      <span class="comment-name">${comment.name}</span>
+      <span class="comment-time">${formatTimeAgo(comment.timestamp)}</span>
+    </div>
+    <div class="comment-text">${comment.text}</div>
+    <div class="comment-actions">
+      <button class="reply-btn" data-comment-id="${comment.id}">Balas</button>
+    </div>
+  `;
+
+  // Add replies container
+  const repliesContainer = document.createElement("div");
+  repliesContainer.className = "replies";
+  div.appendChild(repliesContainer);
+
+  // Render replies if they exist
+  if (comment.replies && comment.replies.length > 0) {
+    comment.replies.forEach(reply => {
+      repliesContainer.appendChild(renderImageComment(reply, allComments));
+    });
+  }
+
+  return div;
+}
 
 
-
-
-
-
-
+// Handle reply button clicks in fullscreen overlay
+document.getElementById('fullscreen-comments').addEventListener('click', function(e) {
+  if (e.target.classList.contains('reply-btn')) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const commentId = e.target.getAttribute('data-comment-id');
+    const form = document.querySelector('#fullscreenOverlay .comment-form');
+    
+    if (form) {
+      const textArea = form.querySelector('textarea[name="text"]');
+      const parentInput = form.querySelector('input[name="parentId"]');
+      
+      parentInput.value = commentId;
+      textArea.placeholder = "Tulis balasan...";
+      textArea.focus();
+      
+      // Scroll to form
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+});
 
 
 
