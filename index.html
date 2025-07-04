@@ -1364,18 +1364,18 @@ function setupEntryStats(entryId) {
       </div>
     `;
 
-    // Event handler untuk navigasi
-    div.addEventListener('click', (event) => {
-      if (!event.target.closest('form') && 
-          !event.target.closest('.comments-list') && 
-          !event.target.classList.contains('reply-btn')) {
-        showPage('page2');
-        setTimeout(() => {
-          const target = document.getElementById(entryId);
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-      }
-    });
+   // Event handler untuk navigasi
+div.addEventListener('click', (event) => {
+  if (!event.target.closest('form') && 
+      !event.target.closest('.comments-list') && 
+      !event.target.classList.contains('reply-btn')) {
+    showPage('page2');
+    setTimeout(() => {
+      const target = document.getElementById(`entry-${index}`);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+});
 
     timelineContainer.appendChild(div);
     loadComments(entryId);
