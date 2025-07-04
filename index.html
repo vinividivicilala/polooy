@@ -1148,7 +1148,8 @@
   
   
   
- // Fungsi untuk memuat komentar - DIMODIFIKASI
+  
+  // Fungsi untuk memuat komentar - sudah dimodifikasi untuk hitung total komentar
 function loadComments(entryId) {
   const q = query(
     collection(db, "comments"),
@@ -1158,13 +1159,13 @@ function loadComments(entryId) {
 
   onSnapshot(q, (snapshot) => {
     const comments = {};
-    let totalComments = 0;
+    let totalComments = 0; // Hitung semua komentar termasuk balasan
     
     snapshot.forEach(doc => {
       const c = { id: doc.id, ...doc.data() };
       comments[c.id] = c;
       c.replies = [];
-      totalComments++;
+      totalComments++; // Tambah ke total komentar
     });
 
     // Kelompokkan balasan
@@ -1199,7 +1200,19 @@ function loadComments(entryId) {
     containers.forEach(container => renderComments(container, comments));
   });
 }
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 // Hitung dan tampilkan tayangan & like
 function setupEntryStats(entryId) {
@@ -1284,36 +1297,60 @@ function setupEntryStats(entryId) {
     });
   }
 
-  // Fungsi untuk render komentar individual
-  function renderComment(comment, allComments) {
-    const div = document.createElement("div");
-    div.className = "comment";
-    
-    div.innerHTML = `
-      <div class="comment-header">
-        <span class="comment-name">${comment.name}</span>
-        <span class="comment-time">${formatTime(comment.timestamp)}</span>
-      </div>
-      <div class="comment-text">${comment.text}</div>
-      <div class="comment-actions">
-        <button class="reply-btn" data-comment-id="${comment.id}" data-entry-id="${comment.entryId}">Balas</button>
-      </div>
-    `;
+  
+  
+  
+  // Fungsi untuk render komentar individual di halaman 1 dan 2
+function renderComment(comment, allComments) {
+  const div = document.createElement("div");
+  div.className = "comment";
+  
+  // Hitung jumlah balasan
+  const replyCount = comment.replies ? comment.replies.length : 0;
+  
+  div.innerHTML = `
+    <div class="comment-header">
+      <span class="comment-name">${comment.name}</span>
+      <span class="comment-time">${formatTime(comment.timestamp)}</span>
+    </div>
+    <div class="comment-text">${comment.text}</div>
+    <div class="comment-actions">
+      <button class="reply-btn" data-comment-id="${comment.id}" data-entry-id="${comment.entryId}">
+        Balas ${replyCount > 0 ? `(${replyCount})` : ''}
+      </button>
+    </div>
+  `;
 
-    // Tambahkan container untuk balasan
-    const repliesContainer = document.createElement("div");
-    repliesContainer.className = "replies";
-    div.appendChild(repliesContainer);
+  // Tambahkan container untuk balasan
+  const repliesContainer = document.createElement("div");
+  repliesContainer.className = "replies";
+  div.appendChild(repliesContainer);
 
-    // Render balasan
-    if (comment.replies && comment.replies.length > 0) {
-      comment.replies.forEach(reply => {
-        repliesContainer.appendChild(renderComment(reply, allComments));
-      });
-    }
-
-    return div;
+  // Render balasan jika ada
+  if (comment.replies && comment.replies.length > 0) {
+    comment.replies.forEach(reply => {
+      repliesContainer.appendChild(renderComment(reply, allComments));
+    });
   }
+
+  return div;
+}
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   // Fungsi untuk menangani klik tombol balas
   document.addEventListener('click', function(e) {
@@ -1498,13 +1535,15 @@ window.addEventListener("load", detectLocation);
  
  
  
- 
  function loadImageComments(imageId) {
   const countEl = document.getElementById('fullscreen-comment-count');
   const container = document.getElementById('fullscreen-comments');
+  const noCommentsMsg = document.getElementById('no-comments-msg');
+  
   if (!countEl || !container) return;
 
   countEl.textContent = '0'; // Reset saat loading
+  noCommentsMsg.style.display = 'block'; // Tampilkan pesan "Belum ada komentar"
 
   const q = query(
     collection(db, "imageComments"),
@@ -1514,23 +1553,30 @@ window.addEventListener("load", detectLocation);
 
   onSnapshot(q, (snapshot) => {
     const comments = {};
-    let commentCount = 0;
+    let totalComments = 0; // Hitung semua komentar termasuk balasan
 
-  snapshot.forEach(doc => {
-  const c = { id: doc.id, ...doc.data(), replies: [] };
-  comments[c.id] = c;
-  if (!c.parentId) commentCount++;
-});
+    snapshot.forEach(doc => {
+      const c = { id: doc.id, ...doc.data(), replies: [] };
+      comments[c.id] = c;
+      totalComments++; // Tambahkan ke total komentar
+    });
 
-// Setelah semua komentar dibuat
-Object.values(comments).forEach(c => {
-  if (c.parentId && comments[c.parentId]) {
-    comments[c.parentId].replies.push(c);
-  }
-});
+    // Kelompokkan balasan
+    Object.values(comments).forEach(c => {
+      if (c.parentId && comments[c.parentId]) {
+        comments[c.parentId].replies.push(c);
+      }
+    });
 
-    // Tampilkan jumlah komentar
-    countEl.textContent = commentCount;
+    // Update jumlah komentar
+    countEl.textContent = totalComments;
+    
+    // Sembunyikan pesan jika ada komentar
+    if (totalComments > 0) {
+      noCommentsMsg.style.display = 'none';
+    } else {
+      noCommentsMsg.style.display = 'block';
+    }
 
     // Render komentar
     container.innerHTML = "";
@@ -1633,7 +1679,7 @@ window.openFullscreen = function(img) {
   currentImageId = img.getAttribute('data-id');
   localStorage.setItem('lastImageId', currentImageId);
 
-  // Reset comment form
+  // Reset form komentar
   const form = document.querySelector('#fullscreenOverlay .comment-form');
   if (form) {
     form.reset();
@@ -1641,12 +1687,12 @@ window.openFullscreen = function(img) {
     form.text.placeholder = "Tulis komentar...";
   }
 
+  // Tampilkan pesan "Belum ada komentar" sementara
+  document.getElementById('no-comments-msg').style.display = 'block';
+  
+  // Muat komentar
   loadImageComments(currentImageId);
 };
-
-
-
-
 
 
 
@@ -1667,9 +1713,14 @@ window.addEventListener("load", () => {
 });
 
 
+
+
 function renderImageComment(comment, allComments) {
   const div = document.createElement("div");
   div.className = "comment";
+  
+  // Hitung jumlah balasan
+  const replyCount = comment.replies ? comment.replies.length : 0;
   
   div.innerHTML = `
     <div class="comment-header">
@@ -1678,16 +1729,18 @@ function renderImageComment(comment, allComments) {
     </div>
     <div class="comment-text">${comment.text}</div>
     <div class="comment-actions">
-      <button class="reply-btn" data-comment-id="${comment.id}">Balas</button>
+      <button class="reply-btn" data-comment-id="${comment.id}">
+        Balas ${replyCount > 0 ? `(${replyCount})` : ''}
+      </button>
     </div>
   `;
 
-  // Add replies container
+  // Tambahkan container untuk balasan
   const repliesContainer = document.createElement("div");
   repliesContainer.className = "replies";
   div.appendChild(repliesContainer);
 
-  // Render replies if they exist
+  // Render balasan jika ada
   if (comment.replies && comment.replies.length > 0) {
     comment.replies.forEach(reply => {
       repliesContainer.appendChild(renderImageComment(reply, allComments));
@@ -1696,6 +1749,14 @@ function renderImageComment(comment, allComments) {
 
   return div;
 }
+
+
+
+
+
+
+
+
 
 
 // Handle reply button clicks in fullscreen overlay
