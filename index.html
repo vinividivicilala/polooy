@@ -596,6 +596,25 @@
   color: #fff;
   border: 1px solid #666;
 }
+
+
+
+
+#fullscreen-comments .comment {
+  margin-bottom: 16px;
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: #000;
+}
+
+.timeline-page #fullscreen-comments .comment {
+  background: #222;
+  color: #fff;
+  box-shadow: none;
+}
+
 	
 	
 	
@@ -603,12 +622,17 @@
   </style>
 </head>
 <body>
+
  <div class="fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreen(event)">
   <div class="fullscreen-content" onclick="event.stopPropagation()">
     <img id="fullscreenImage" src="" alt="Fullscreen">
-    <div class="image-comment-section">
-      <div class="comments-list" id="fullscreen-comments"></div>
-      <form class="comment-form" onsubmit="submitFullscreenComment(event)">
+   <div class="image-comment-section">
+  <h4 style="margin-bottom: 10px;">Komentar 
+    <span id="fullscreen-comment-count" class="comment-count"></span>
+  </h4>
+  <div class="comments-list" id="fullscreen-comments"></div>
+  <p id="no-comments-msg" style="color: gray; text-align: center;">Belum ada komentar</p>
+  <form class="comment-form" onsubmit="submitFullscreenComment(event)">
         <input type="text" name="name" placeholder="Nama" required>
         <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
         <input type="hidden" name="parentId" value="">
@@ -745,9 +769,10 @@
           <div class="comments-list" id="comments-page2-entry-0"></div>
         </div>
         <div class="image-row">
-          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
-          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
-          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+		<img src="images/5.jpg" data-id="image-5-1" onclick="openFullscreen(this)">
+<img src="images/5.jpg" data-id="image-5-2" onclick="openFullscreen(this)">
+<img src="images/5.jpg" data-id="image-5-3" onclick="openFullscreen(this)">
+
         </div>
       </div>
     </div>
@@ -763,6 +788,11 @@
             <li>Website Changelog Note Farid sudah didomain secara online, kamu bisa pantau terus secara update disini!</li>
           </ul>
         </div>
+		<div class="support-section" data-id="page2-entry-0">
+  <div class="view-count">👁️ <span class="view-num">0</span> tayangan</div>
+  <button class="like-btn">👍 Dukung Naik (<span class="like-num">0</span>)</button>
+</div>
+		
 		<div class="comment-section" data-entry="page2-entry-1">
           <h4>Komentar</h4>
 		  <form class="comment-form" onsubmit="submitComment(event, 'page2-entry-1', 'page2')">
@@ -774,9 +804,10 @@
 		  <div class="comments-list" id="comments-page2-entry-1"></div>
         </div>
         <div class="image-row">
-          <img src="images/5.jpg" alt="Preview 1" onclick="openFullscreen(this)">
-          <img src="images/5.jpg" alt="Preview 2" onclick="openFullscreen(this)">
-          <img src="images/5.jpg" alt="Preview 3" onclick="openFullscreen(this)">
+         <img src="images/5.jpg" alt="Preview 1" data-id="image-5" onclick="openFullscreen(this)">
+<img src="images/5.jpg" alt="Preview 1" data-id="image-5" onclick="openFullscreen(this)">
+<img src="images/5.jpg" alt="Preview 1" data-id="image-5" onclick="openFullscreen(this)">
+
         </div>
       </div>
     </div>
@@ -1082,6 +1113,8 @@
   // Inisialisasi Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  
+  let currentImageId = null;
 
   const changelog = [
     { date: '29 Jun, 2025', content: 'Website Changelog page selesai dibikin 2025' },
@@ -1457,22 +1490,22 @@ function showError(error) {
 // Jalankan saat window selesai load
 window.addEventListener("load", detectLocation);
 
-  
-  
-  // Modifikasi fungsi openFullscreen
-window.openFullscreen = function(img) {
-  const overlay = document.getElementById('fullscreenOverlay');
-  const fullscreenImage = document.getElementById('fullscreenImage');
-  fullscreenImage.src = img.src;
-  overlay.style.display = 'flex';
-  
-  // Load komentar untuk gambar ini (gunakan ID unik berdasarkan src gambar)
-  const imageId = 'image-' + encodeURIComponent(img.src);
-  loadImageComments(imageId);
-};
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ function loadImageComments(imageId) {
+  const countEl = document.getElementById('fullscreen-comment-count');
+  const container = document.getElementById('fullscreen-comments');
+  if (!countEl || !container) return;
 
-// Fungsi untuk memuat komentar gambar
-function loadImageComments(imageId) {
+  countEl.textContent = '0'; // Reset saat loading
+
   const q = query(
     collection(db, "imageComments"),
     where("imageId", "==", imageId),
@@ -1481,10 +1514,13 @@ function loadImageComments(imageId) {
 
   onSnapshot(q, (snapshot) => {
     const comments = {};
+    let commentCount = 0;
+
     snapshot.forEach(doc => {
       const c = { id: doc.id, ...doc.data() };
       comments[c.id] = c;
       c.replies = [];
+      if (!c.parentId) commentCount++;
     });
 
     // Kelompokkan balasan
@@ -1494,29 +1530,35 @@ function loadImageComments(imageId) {
       }
     });
 
+    // Tampilkan jumlah komentar
+    countEl.textContent = commentCount;
+
     // Render komentar
-    const container = document.getElementById('fullscreen-comments');
     container.innerHTML = "";
-    
     Object.values(comments).forEach(c => {
       if (!c.parentId) {
         container.appendChild(renderImageComment(c, comments));
       }
     });
+
+    // Scroll otomatis ke bawah
+    setTimeout(() => {
+      container.scrollTop = container.scrollHeight;
+    }, 100);
   });
 }
 
-// Fungsi render komentar untuk gambar
-function renderImageComment(comment) {
+ 
+ 
+ 
+ function renderImageComment(comment, allComments) {
   const div = document.createElement("div");
   div.className = "comment";
-  
-  const timeAgo = formatTimeAgo(comment.timestamp);
-  
+
   div.innerHTML = `
     <div class="comment-header">
       <span class="comment-name">${comment.name}</span>
-      <span class="comment-time">${timeAgo}</span>
+      <span class="comment-time">${formatTimeAgo(comment.timestamp)}</span>
     </div>
     <div class="comment-text">${comment.text}</div>
     <div class="comment-actions">
@@ -1524,17 +1566,32 @@ function renderImageComment(comment) {
     </div>
   `;
 
+  const repliesContainer = document.createElement("div");
+  repliesContainer.className = "replies";
+  div.appendChild(repliesContainer);
+
   if (comment.replies && comment.replies.length > 0) {
-    const repliesContainer = document.createElement("div");
-    repliesContainer.className = "replies";
     comment.replies.forEach(reply => {
-      repliesContainer.appendChild(renderImageComment(reply));
+      repliesContainer.appendChild(renderImageComment(reply, allComments));
     });
-    div.appendChild(repliesContainer);
   }
 
   return div;
 }
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
 
 // Fungsi format waktu "x menit/jam/hari yang lalu"
 function formatTimeAgo(timestamp) {
@@ -1561,7 +1618,17 @@ function formatTimeAgo(timestamp) {
   return 'Baru saja';
 }
 
-// Fungsi submit komentar gambar
+
+
+
+
+
+
+
+
+
+
+
 window.submitFullscreenComment = async function(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -1570,20 +1637,23 @@ window.submitFullscreenComment = async function(e) {
   const name = form.name.value.trim();
   const text = form.text.value.trim();
   const parentId = form.parentId.value || null;
-  const imageId = 'image-' + encodeURIComponent(document.getElementById('fullscreenImage').src);
 
-  if (name && text) {
+  if (name && text && currentImageId) {
     try {
       await addDoc(collection(db, "imageComments"), {
-        imageId,
+        imageId: currentImageId,
         name,
         text,
         parentId,
         timestamp: serverTimestamp()
       });
       
+      // Reset form setelah submit
       form.reset();
       form.parentId.value = "";
+      form.text.placeholder = "Tulis komentar...";
+      
+      // Tidak perlu memuat ulang komentar karena onSnapshot akan menangani update
     } catch (error) {
       console.error("Error adding comment: ", error);
       alert("Gagal mengirim komentar. Silakan coba lagi.");
@@ -1591,7 +1661,7 @@ window.submitFullscreenComment = async function(e) {
   }
 };
 
-// Tangani klik tombol balas di komentar gambar
+
 document.addEventListener('click', function(e) {
   if (e.target.classList.contains('reply-btn') && e.target.closest('#fullscreen-comments')) {
     e.stopPropagation();
@@ -1605,22 +1675,70 @@ document.addEventListener('click', function(e) {
       parentInput.value = commentId;
       textArea.placeholder = "Tulis balasan...";
       textArea.focus();
+      
+      // Scroll ke form
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }
 });
 
+
+
+
 window.closeFullscreen = function(e) {
-  // Hanya tutup jika klik di luar konten
   if (e.target === document.getElementById('fullscreenOverlay')) {
     document.getElementById('fullscreenOverlay').style.display = 'none';
-    document.getElementById('fullscreen-comments').innerHTML = '';
+    currentImageId = null;
+    localStorage.removeItem('lastImageId'); // ✅ hapus imageId tersimpan
   }
 };
-  
-  
-  
-  
-  
+
+
+
+window.openFullscreen = function(img) {
+  const overlay = document.getElementById('fullscreenOverlay');
+  const fullscreenImage = document.getElementById('fullscreenImage');
+  fullscreenImage.src = img.src;
+  overlay.style.display = 'flex';
+
+  currentImageId = img.getAttribute('data-id');
+  localStorage.setItem('lastImageId', currentImageId); // ✅ simpan sementara
+
+  loadImageComments(currentImageId);
+
+  const form = document.querySelector('#fullscreenOverlay .comment-form');
+  if (form) {
+    form.reset();
+    form.parentId.value = "";
+    form.text.placeholder = "Tulis komentar...";
+  }
+};
+
+
+
+// Saat reload halaman, kalau sebelumnya user buka gambar, tampilkan kembali
+window.addEventListener("load", () => {
+  const savedImageId = localStorage.getItem('lastImageId');
+  if (savedImageId) {
+    // Trigger buka gambar secara otomatis
+    const img = document.querySelector(`img[data-id="${savedImageId}"]`);
+    if (img) {
+      openFullscreen(img);
+    }
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
   
   
   
