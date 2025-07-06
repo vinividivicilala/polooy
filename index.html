@@ -615,7 +615,296 @@
   box-shadow: none;
 }
 
-	
+
+
+
+#progress-indicator {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  background: #111;
+  color: #fff;
+  padding: 18px 24px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 32px;
+  z-index: 9999;
+}
+
+#progress-indicator svg {
+  width: 28px;
+  height: 28px;
+  margin-left: 8px;
+  stroke: #fff;
+}
+
+
+	#add-feature-btn {
+  position: fixed;
+  top: 70px;
+  right: 30px;
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#activity-log {
+  position: fixed;
+  top: 120px;
+  right: 30px;
+  background: #222;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+#activity-log h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+#activity-log ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#activity-log li {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+
+#progress-indicator {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  background: #111;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  z-index: 9999;
+  cursor: pointer; /* agar kelihatan bisa di-klik */
+}
+
+#progress-indicator svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  stroke: #fff;
+}
+
+#activity-log {
+  position: fixed;
+  top: 60px; /* sedikit di bawah progress */
+  right: 30px;
+  background: #222;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  width: 220px;
+  max-height: 300px;
+  overflow-y: auto;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: all 0.3s ease;
+  pointer-events: none; /* agar tidak bisa diklik saat hidden */
+}
+
+#activity-log.active {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+#activity-log h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+#activity-log ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#activity-log li {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+#add-feature-btn {
+  position: fixed;
+  top: 100px;
+  right: 30px;
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+#progress-indicator {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  background: #111;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 9999;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+#progress-indicator:hover {
+  background: #222;
+  transform: translateY(-2px);
+}
+
+#progress-percent {
+  font-size: 24px;
+  margin-right: 8px;
+  color: #4CAF50;
+}
+
+#progress-arrow {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+#progress-indicator.active #progress-arrow {
+  transform: rotate(90deg);
+}
+
+
+#activity-log {
+  background: #222;
+  color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+#activity-log h3 {
+  margin-top: 0;
+  color: #4CAF50;
+}
+
+#activity-log ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+#activity-log li {
+  margin-bottom: 10px;
+}
+
+
+
+.vote-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+}
+
+.vote-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.vote-btn svg {
+  width: 29px;
+  height: 29px;
+  stroke: red;
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+.vote-btn:hover svg {
+  stroke: green;
+  transform: scale(1.3);
+}
+
+.vote-btn.down:hover svg {
+  stroke: blue;
+}
+
+.vote-count {
+  min-width: 24px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.vote-count.flash-up {
+  color: #4CAF50 !important;
+  animation: flash-up 0.6s ease;
+}
+
+.vote-count.flash-down {
+  color: #f44336 !important;
+  animation: flash-down 0.6s ease;
+}
+
+@keyframes flash-up {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+@keyframes flash-down {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.7); }
+  100% { transform: scale(1); }
+}
+
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.timeline-page h1 {
+  animation: slideInLeft 20s ease-out forwards;
+  opacity: 0; /* awalnya transparan */
+}
+
+
 	
 	
 	
@@ -661,6 +950,15 @@
   white-space: nowrap;
   transition: opacity 0.2s ease;">
 </div>
+
+<div id="progress-status" style="
+  position: fixed;
+  top: 80px;
+  right: 30px;
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 18px;"></div>
+
 
 
   
@@ -724,6 +1022,19 @@
 
 <div id="contact-response" style="display:none; margin-top: 30px; padding: 20px; border-radius: 10px; text-align:center; font-size: 18px; font-weight: bold;"></div>
   </div>
+  
+  
+  <div id="progress-indicator">
+  <span id="progress-percent">0%</span>
+  <svg id="progress-arrow" viewBox="0 0 24 24">
+    <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</div>
+
+<div id="activity-log">
+  <h3>Riwayat Kegiatan</h3>
+  <ul id="log-list"></ul>
+</div>
   
  
  
@@ -1089,16 +1400,12 @@
   </div>
 </div>
  
- <p id="lokasi-info" style="text-align:center; color: black; font-size:29px; margin-bottom:20px;">
-    Mendeteksi lokasi...
-  </p>
-
  
 
  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp, orderBy, doc, getDoc, updateDoc, increment, setDoc  } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp, orderBy, doc, getDoc, updateDoc, increment, setDoc, getDocs,   } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
   // Konfigurasi Firebase
   const firebaseConfig = {
@@ -1113,6 +1420,13 @@
   // Inisialisasi Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+   const progressRef = collection(db, "progressLogs");
+  const progressPercent = document.getElementById("progress-percent");
+  const logList = document.getElementById("log-list");
+  const now = new Date();
+const timestamp = serverTimestamp();
+
+
   
   let currentImageId = null;
 
@@ -1131,18 +1445,17 @@
 
   const timelineContainer = document.getElementById('timeline');
 
-  // Format waktu
   function formatTime(timestamp) {
-    if (!timestamp) return '';
-    const date = timestamp.toDate();
-    return date.toLocaleString('id-ID', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
+  if (!timestamp || typeof timestamp.toDate !== 'function') return 'Belum tersedia';
+  const date = timestamp.toDate();
+  return date.toLocaleString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
 
   
   
@@ -1314,11 +1627,30 @@ function renderComment(comment, allComments) {
       <span class="comment-time">${formatTime(comment.timestamp)}</span>
     </div>
     <div class="comment-text">${comment.text}</div>
-    <div class="comment-actions">
-      <button class="reply-btn" data-comment-id="${comment.id}" data-entry-id="${comment.entryId}">
-        Balas ${replyCount > 0 ? `(${replyCount})` : ''}
-      </button>
-    </div>
+  <div class="comment-actions">
+  <button class="reply-btn" data-comment-id="${comment.id}" data-entry-id="${comment.entryId}">Balas ${replyCount > 0 ? `(${replyCount})` : ''}</button>
+  
+  <div class="vote-controls">
+    <button class="vote-btn up" data-id="${comment.id}" data-type="up" title="Vote Naik">
+      <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="19" x2="12" y2="5"/>
+        <polyline points="5 12 12 5 19 12"/>
+      </svg>
+    </button>
+
+    <span class="vote-count" id="vote-count-${comment.id}">${comment.votes || 0}</span>
+
+    <button class="vote-btn down" data-id="${comment.id}" data-type="down" title="Vote Turun">
+      <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <polyline points="19 12 12 19 5 12"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+
+
   `;
 
   // Tambahkan container untuk balasan
@@ -1728,11 +2060,28 @@ function renderImageComment(comment, allComments) {
       <span class="comment-time">${formatTimeAgo(comment.timestamp)}</span>
     </div>
     <div class="comment-text">${comment.text}</div>
-    <div class="comment-actions">
-      <button class="reply-btn" data-comment-id="${comment.id}">
-        Balas ${replyCount > 0 ? `(${replyCount})` : ''}
-      </button>
-    </div>
+	 <div class="comment-actions">
+  <button class="reply-btn" data-comment-id="${comment.id}" data-entry-id="${comment.entryId}">Balas ${replyCount > 0 ? `(${replyCount})` : ''}</button>
+  
+  <div class="vote-controls">
+    <button class="vote-btn up" data-id="${comment.id}" data-type="up" title="Vote Naik">
+      <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="19" x2="12" y2="5"/>
+        <polyline points="5 12 12 5 19 12"/>
+      </svg>
+    </button>
+
+    <span class="vote-count" id="vote-count-${comment.id}">${comment.votes || 0}</span>
+
+    <button class="vote-btn down" data-id="${comment.id}" data-type="down" title="Vote Turun">
+      <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <polyline points="19 12 12 19 5 12"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
   `;
 
   // Tambahkan container untuk balasan
@@ -1752,6 +2101,47 @@ function renderImageComment(comment, allComments) {
 
 
 
+
+// ✅ Event listener untuk voting komentar gambar (fullscreen)
+document.getElementById('fullscreen-comments').addEventListener('click', function(e) {
+  const btn = e.target.closest('.vote-btn');
+  if (btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const commentId = btn.getAttribute('data-id');
+    const type = btn.getAttribute('data-type'); // "up" atau "down"
+    if (commentId && type) {
+      handleImageVote(commentId, type);
+    }
+  }
+});
+
+
+
+
+function handleImageVote(commentId, type) {
+  const countEl = document.getElementById(`vote-count-${commentId}`);
+  const commentRef = doc(db, "imageComments", commentId);
+
+  getDoc(commentRef).then(docSnap => {
+    if (docSnap.exists()) {
+      const currentVotes = docSnap.data().votes || 0;
+      const newVotes = type === "up" ? currentVotes + 1 : currentVotes - 1;
+
+      updateDoc(commentRef, {
+        votes: newVotes
+      }).then(() => {
+        if (countEl) {
+          countEl.textContent = newVotes;
+          countEl.classList.add(type === "up" ? 'flash-up' : 'flash-down');
+          setTimeout(() => countEl.classList.remove('flash-up', 'flash-down'), 600);
+        }
+      });
+    }
+  }).catch(err => {
+    console.error("Gagal melakukan vote:", err);
+  });
+}
 
 
 
@@ -1784,10 +2174,238 @@ document.getElementById('fullscreen-comments').addEventListener('click', functio
 
 
 
+
+  // Fungsi menampilkan 1 riwayat kegiatan
+  function addActivityToLog(message, timestamp) {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div style="margin-bottom: 20px; border-bottom: 1px solid #555; padding-bottom: 10px;">
+        <img src="images/5.jpg" style="width: 100%; max-width: 200px; border-radius: 12px; margin-bottom: 10px;" alt="Foto Kegiatan">
+        <div style="font-size: 18px; font-weight: bold; color: #fff;">${message}</div>
+        <div style="font-size: 14px; color: #ccc;">${formatTime(timestamp)}</div>
+      </div>
+    `;
+    logList.appendChild(li);
+  }
+
+  function updateProgress(target) {
+  let start = parseInt(progressPercent.textContent.replace('%', '')) || 0;
+  const duration = 1500;
+  const startTime = performance.now();
+
+  function animate(time) {
+    const elapsed = time - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = progress * progress * (3 - 2 * progress);
+    const currentPercent = Math.floor(start + (target - start) * eased);
+    progressPercent.textContent = currentPercent + '%';
+
+    // ✅ Tampilkan semua aktivitas sesuai progress
+    progressActivities.forEach(activity => {
+      if (
+        activity.percent <= currentPercent &&
+        !existingMessages.has(activity.message)
+      ) {
+        addActivityToLog(activity.message, new Date());
+        addDoc(progressRef, {
+          message: activity.message,
+          timestamp: serverTimestamp()
+        }).catch(error => {
+          console.error("Error adding activity:", error);
+        });
+        existingMessages.add(activity.message);
+      }
+    });
+
+    if (progress < 1) requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+
+  
+  
+  let existingMessages = new Set(); // <- agar bisa diakses updateProgress()
+async function simulateRealProgress() {
+  const snapshot = await getDocs(progressRef);
+  existingMessages.clear();
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    if (data.message) {
+      existingMessages.add(data.message);
+      addActivityToLog(data.message, data.timestamp);
+    }
+  });
+
+  const totalActivities = progressActivities.length;
+  const completedActivities = progressActivities.filter(a => 
+    existingMessages.has(a.message)
+  ).length;
+
+  let percent = Math.floor((completedActivities / totalActivities) * 100);
+
+  // ✅ Jika kosong, langsung tambah aktivitas awal
+  if (percent === 0) {
+    const first = progressActivities[0];
+    await addDoc(progressRef, {
+      message: first.message,
+      timestamp: serverTimestamp()
+    });
+    addActivityToLog(first.message, new Date());
+    existingMessages.add(first.message);
+    percent = 1;
+  }
+
+  updateProgress(percent);
+}
+
+  
+  
+   // Tambahkan variabel ini di bagian atas script
+  let percentRotationInterval;
+  let currentPercent = 0;
+  const targetPercents = [10, 25, 50, 75, 90, 100]; // Daftar persentase yang akan dirotasi
+
+  function startPercentRotation() {
+  let index = 0;
+
+  if (percentRotationInterval) clearInterval(percentRotationInterval);
+
+  percentRotationInterval = setInterval(() => {
+    const activity = progressActivities[index];
+    if (!activity) return;
+
+    // Tampilkan persen dulu
+    progressPercent.innerHTML = `<span style="color:#4CAF50; font-weight:bold;">${activity.percent}%</span>`;
+    
+    setTimeout(() => {
+      // Lalu ganti dengan teks aktivitas
+      progressPercent.innerHTML = `<span style="color:#fff; font-size:16px;">${activity.message}</span>`;
+    }, 1500); // setelah 1.5 detik ganti ke teks
+
+    index = (index + 1) % progressActivities.length;
+  }, 3000); // ganti setiap 3 detik
+}
+
   
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  // Fungsi untuk animasi perubahan persentase
+  function animatePercentChange(from, to) {
+    const duration = 1000;
+    const startTime = performance.now();
+    
+    function animate(time) {
+      const elapsed = time - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = progress * progress * (3 - 2 * progress);
+      const currentValue = Math.floor(from + (to - from) * eased);
+      
+      progressPercent.textContent = currentValue + '%';
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    }
+    
+    requestAnimationFrame(animate);
+  }
+
+  // Jalankan saat halaman dimuat
+  window.addEventListener("load", () => {
+    simulateRealProgress();
+    setTimeout(startPercentRotation, 2000); // Mulai rotasi setelah 2 detik
+  });
+  
+  
+  
+  
+
+
+const progressActivities = [
+  { percent: 0, message: "Memulai Website changelog" },
+];
+
+
+  
+
+window.addEventListener("load", () => {
+  simulateRealProgress();
+});
+
+  
+
+
+ // ✅ Toggle log saat progress diklik
+document.getElementById("progress-indicator").addEventListener("click", () => {
+  const log = document.getElementById("activity-log");
+  log.classList.toggle("active");
+});
+
+// Tangani klik vote (berlaku untuk semua komentar termasuk fullscreen)
+document.addEventListener("click", async function(e) {
+  const btn = e.target.closest(".vote-btn");
+  if (!btn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const commentId = btn.dataset.id;
+  const type = btn.dataset.type;
+  const voteDisplay = document.getElementById(`vote-count-${commentId}`);
+  if (!commentId || !type || !voteDisplay) return;
+
+  // Tentukan apakah berasal dari komentar gambar atau biasa
+  const inFullscreen = btn.closest("#fullscreen-comments") !== null;
+  const collectionName = inFullscreen ? "imageComments" : "comments";
+  const commentRef = doc(db, collectionName, commentId);
+
+  try {
+    const snap = await getDoc(commentRef);
+    if (!snap.exists()) return;
+
+    const currentVotes = snap.data().votes || 0;
+    const newVotes = type === "up" ? currentVotes + 1 : currentVotes - 1;
+    await updateDoc(commentRef, { votes: newVotes });
+
+    voteDisplay.textContent = newVotes;
+    voteDisplay.classList.remove("flash-up", "flash-down");
+    void voteDisplay.offsetWidth; // Trigger reflow
+    voteDisplay.classList.add(type === "up" ? "flash-up" : "flash-down");
+  } catch (err) {
+    console.error("Gagal update vote:", err);
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </script>
 </body>
 </html>
