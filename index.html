@@ -1578,6 +1578,47 @@ body.light-mode #fullscreen-comments .comment {
 }
 
 
+/* Tambahkan ini di bagian light-mode styling */
+body.light-mode .container {
+  background: #fff;
+  color: #000;
+}
+
+
+body.dark-mode {
+  background: #000 !important;
+}
+
+body.dark-mode .container {
+  background: #000;
+  color: #fff;
+}
+
+body.dark-mode .content {
+  background: #222;
+  color: #fff;
+}
+
+body.dark-mode .image-row img {
+  background: transparent !important;
+  border: 1px solid #444;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1610,7 +1651,7 @@ body.light-mode #fullscreen-comments .comment {
 <button id="theme-toggle" style="
   position: fixed;
   top: 20px;
-  left: 80px;
+  left: 150px;
   z-index: 10000;
   background: #222;
   color: white;
@@ -3214,8 +3255,8 @@ document.addEventListener("click", async function(e) {
 
 
 
-
- 
+let popupTimer = null;
+ let popupOpenTime = null; // Simpan waktu pembukaan popup
 let currentSlide = 0;
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.progress-dots .dot');
@@ -3360,8 +3401,44 @@ async function incrementPopupView() {
 }
 
 
+window.openPopupAd = function () {
+  const popup = document.getElementById('popupAd');
+  const title = document.getElementById('popup-title');
+  const views = document.getElementById('popup-views');
+  const date = document.getElementById('popup-date');
+  const subtitleNum = document.getElementById('popup-subtitle-number');
+  const subtitleText = document.getElementById('popup-subtitle-text');
+  const img = document.getElementById('popup-img');
+  const desc = document.getElementById('popup-desc');
 
+  title.textContent = 'Promo Krealoka';
+  subtitleNum.textContent = '1';
+  subtitleText.textContent = 'Diskon 100%';
+  img.src = 'images/5.jpg';
+  desc.innerHTML = '<p>Daftar jasa ilustrasi karakter profesional sekarang dan dapatkan konsultasi gratis!</p>';
 
+  // Update waktu setiap detik
+  function updatePopupTime() {
+    const now = new Date();
+    date.textContent = now.toLocaleString('id-ID', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  updatePopupTime(); // panggil langsung agar tampil awal
+  popup.style.display = 'flex';
+  window.popupInterval = setInterval(updatePopupTime, 1000); // update per detik
+}
+
+window.closePopup = function () {
+  document.getElementById('popupAd').style.display = 'none';
+  clearInterval(window.popupInterval);
+}
 
 
 
@@ -3456,11 +3533,12 @@ function getTimeAgoText(date) {
 
 
 
-
-
 function openPopupAd() {
   const popup = document.getElementById('popupAd');
   popup.style.display = 'flex';
+  let popupTimer = null;
+ popupOpenTime = new Date(); // hanya set sekali
+  popupTimer = setInterval(updatePopupTime, 1000);
 
   const title = 'Promo Ilustrasi Digital';
   const subtitleNumber = '1';
@@ -3487,7 +3565,6 @@ function openPopupAd() {
   document.getElementById('popup-date').innerHTML = `${formatted} - <span id="popup-relative">Baru saja</span>`;
   startRelativeTimeUpdater(now);
 
-  // ========== TAMBAH VIEW AKURAT ==========
   const adRef = doc(db, 'popupAdViews', 'popupAd-main');
 
   updateDoc(adRef, { views: increment(1) })
@@ -3585,9 +3662,7 @@ function adjustImageSize(imgElement) {
 
   function closePopup() {
     document.getElementById('popupAd').style.display = 'none';
-    stopPopupViewTracking();
-    popupOpenedAt = null;
-  }
+    stopPopupViewTracking();  }
 
   // Update the close button event listener
   document.querySelector('.popup-close').addEventListener('click', closePopup);
@@ -3606,25 +3681,15 @@ document.getElementById('open-ad-btn')?.addEventListener('click', () => {
 });
 
 
-const toggleBtn = document.getElementById("theme-toggle");
-const body = document.body;
 
-// Cek preferensi pengguna sebelumnya
-if (localStorage.getItem("theme") === "light") {
-  body.classList.add("light-mode");
-  toggleBtn.textContent = "🌞 Mode Terang";
-}
+  const themeToggle = document.getElementById('theme-toggle');
+  const body = document.body;
 
-// Saat tombol diklik
-toggleBtn.addEventListener("click", () => {
-  body.classList.toggle("light-mode");
-  const isLight = body.classList.contains("light-mode");
-  toggleBtn.textContent = isLight ? "🌞 Mode Terang" : "🌙 Mode Gelap";
-  localStorage.setItem("theme", isLight ? "light" : "dark");
-});
-
-
-
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    body.classList.toggle('light-mode');
+    themeToggle.textContent = body.classList.contains('dark-mode') ? '🌙 Mode Gelap' : '☀️ Mode Terang';
+  });
 
 
 
