@@ -3857,8 +3857,7 @@ function adjustImageSize(imgElement) {
   function closePopup() {
     document.getElementById('popupAd').style.display = 'none';
     stopPopupViewTracking();  }
-	clearInterval(popupTimeInterval);
-  popupTimeInterval = null;
+	
 
   // Update the close button event listener
   document.querySelector('.popup-close').addEventListener('click', closePopup);
