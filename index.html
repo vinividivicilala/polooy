@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Changelog Gabungan</title>
@@ -905,9 +906,560 @@
 }
 
 
-	
-	
-	
+
+
+.slider-intro {
+  background: #161618;
+  color: #fff;
+  padding: 60px 20px 40px;
+  text-align: center;
+  border-radius: 28px;
+  margin: 30px auto;
+  max-width: 900px;
+}
+
+.slider-title {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  animation: slideIntroTitle 1.2s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideIntroTitle {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.slider-sub {
+  font-size: 26px;
+  margin: 0;
+}
+.slider-sub .sub-small {
+  font-size: 16px;
+  color: #aaa;
+}
+
+.slider-desc {
+  font-size: 16px;
+  color: #ddd;
+  margin-top: 10px;
+}
+
+.slider-btn {
+  margin-top: 20px;
+  background: #6366f1;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.circle-bar-wrapper {
+  margin-top: 30px;
+}
+
+#circle-progress-indicator {
+  height: 10px;
+  width: 120px;
+  background-color: #ddd;
+  border-radius: 20px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+#circle-progress-indicator::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 0%;
+  background-color: #2196f3;
+  border-radius: 20px;
+  animation: fillBar 5s linear forwards;
+}
+
+@keyframes fillBar {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.dot-indicators {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  background: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot.active {
+  background: #2196f3;
+}
+
+.intro-slider-container {
+  background: #161618;
+  color: #fff;
+  padding: 60px 20px 40px;
+  text-align: center;
+  border-radius: 28px;
+  margin: 40px auto 30px;
+  max-width: 880px;
+}
+
+.intro-title {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  animation: introSlideIn 1.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes introSlideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.intro-subtitle {
+  font-size: 24px;
+  margin: 0;
+}
+
+.intro-subtitle .small-text {
+  font-size: 15px;
+  color: #aaa;
+}
+
+.intro-desc {
+  font-size: 16px;
+  color: #ddd;
+  margin-top: 8px;
+}
+
+.intro-button {
+  margin-top: 20px;
+  background: #6366f1;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.intro-progress-wrapper {
+  margin-top: 30px;
+  width: 60%;
+  height: 10px;
+  background: #ccc;
+  border-radius: 10px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.intro-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #2196f3;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.intro-dots {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.intro-dot {
+  width: 10px;
+  height: 10px;
+  background: #888;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.intro-dot.active {
+  background: #2196f3;
+}
+
+
+
+.slider-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 40px 20px;
+  background: #161618;
+  color: #fff;
+  border-radius: 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-wrapper {
+  position: relative;
+  height: 300px;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateX(100%);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide h2 {
+  font-size: 48px;
+  margin-bottom: 10px;
+  animation: slideInDown 0.8s ease-out;
+}
+
+.slide-subtitle {
+  font-size: 26px;
+  margin: 10px 0;
+}
+
+.slide-subtitle strong {
+  font-size: 32px;
+  color: #4CAF50;
+}
+
+.slide-subtitle span {
+  font-size: 16px;
+  color: #aaa;
+}
+
+.slide-description {
+  font-size: 16px;
+  color: #ddd;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.slider-button {
+  margin-top: 20px;
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slider-button:hover {
+  background: #4F46E5;
+  transform: translateY(-2px);
+}
+
+.progress-container {
+  width: 120px;
+  height: 6px;
+  background: #ddd; /* warna abu */
+  border-radius: 5px;
+  margin: 20px auto 0;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: #2196f3; /* warna biru progress */
+  border-radius: 5px;
+  transition: width 5s linear; /* animasi isi progress */
+}
+
+.dot-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #ccc;
+  border-radius: 50%;
+}
+
+.dot.active {
+  background: #2196f3;
+}
+
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fillProgress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+
+
+/* Tambah ini di style */
+.slider-wrapper {
+  position: relative;
+}
+
+.progress-dots {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-dots .dot {
+  width: 12px;
+  height: 12px;
+  background: #888;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.progress-dots .dot.active {
+  background: #2196f3;
+}
+
+.progress-vertical {
+  position: absolute;
+  left: 6px; /* tengah dot */
+  top: 0;
+  width: 2px;
+  height: 0%;
+  background: #2196f3;
+  transition: height 5s linear;
+}
+
+
+.ad-badge {
+  position: absolute;
+  bottom: 1px;
+  right: 20px;
+  background: red; /* ✅ perbaikan */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 10;
+  
+}
+
+
+.dot {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ddd;
+  position: relative;
+  overflow: hidden;
+}
+
+.dot.active::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 50%;
+  background-color: #2196f3;
+  animation: fillDot 5s linear forwards;
+  border-radius: 50%;
+}
+
+@keyframes fillDot {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+
+
+
+ .popup-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .popup-box {
+    background: #000;
+    color: #fff;
+    width: 90%;
+    max-width: 900px;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .popup-box h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+
+  .popup-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+    color: #aaa;
+  }
+
+  .popup-view-count {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .popup-separator {
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    margin: 15px 0;
+  }
+
+  .popup-content {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .popup-content p {
+    margin-bottom: 15px;
+  }
+
+  .popup-content a {
+    color: #4fc3f7;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  .popup-content ol {
+    padding-left: 25px;
+    margin: 15px 0;
+  }
+
+  .popup-content li {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .popup-close {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .popup-close:hover {
+    background: #3e8e41;
+  }
+
+  .popup-img-container {
+    margin: 20px 0;
+    text-align: left;
+  }
+
+  .popup-img {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  .popup-subtitle {
+    font-size: 20px;
+    color: #ccc;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
+  .popup-subtitle-number {
+    background: #4CAF50;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    font-size: 16px;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
   </style>
 </head>
 <body>
@@ -958,6 +1510,18 @@
   color: #4CAF50;
   font-weight: bold;
   font-size: 18px;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1024,6 +1588,10 @@
   </div>
   
   
+  
+  
+  
+  
   <div id="progress-indicator">
   <span id="progress-percent">0%</span>
   <svg id="progress-arrow" viewBox="0 0 24 24">
@@ -1035,6 +1603,95 @@
   <h3>Riwayat Kegiatan</h3>
   <ul id="log-list"></ul>
 </div>
+
+<div class="slider-container">
+  <div class="slider-wrapper">
+    <!-- Slide 1 -->
+    <div class="slide active">
+	<div class="ad-badge">Ads</div>
+       <h2>
+    <a href="https://www.instagram.com/krea.loka/" target="_blank" style="color: #fff; background: blue; padding: 4px 10px; border-radius: 8px; text-decoration: none;">
+      Jasa Illustration Character
+    </a>
+  </h2>
+	  <p class="slide-subtitle">
+  <strong style="background: red; padding: 4px 8px; border-radius: 8px;">0%</strong>
+  <span style="background: #333; padding: 2px 6px; border-radius: 6px;">per setiap konsultasi</span>
+</p>
+
+      <p class="slide-description">jasa illustration character <strong style="background: red; padding: 4px 8px; border-radius: 8px;">krealoka</strong>secara profesional.</p>
+<button class="slider-button" id="open-ad-btn" onclick="openPopupAd()">Daftar Sekarang</button>
+</div>
+
+    
+    <!-- Slide 2 -->
+    <div class="slide">
+		  	<div class="ad-badge">Coming Soon</div>
+      <h2>Coming Soon</h2>
+      <p class="slide-subtitle"><strong>Coming Soon</strong> <span>Coming Soon</span></p>
+      <p class="slide-description">Coming Soon.</p>
+      <button class="slider-button">Coming Soon</button>
+    </div>
+    
+    <!-- Slide 3 -->
+    <div class="slide">
+		  	<div class="ad-badge">Coming Soon</div>
+      <h2>Coming Soon</h2>
+      <p class="slide-subtitle"><strong>Coming Soon</strong> <span>Coming Soon</span></p>
+      <p class="slide-description">Coming Soon.</p>
+      <button class="slider-button">Coming Soon</button>
+    </div>
+  </div>
+  
+ <div class="progress-dots">
+  <span class="dot active"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <div class="progress-vertical"></div>
+</div>
+</div>
+
+
+
+
+
+
+
+<div id="popupAd" class="popup-overlay" style="display:none;">
+  <div class="popup-box">
+    <div class="popup-header">
+      <h2 id="popup-title"></h2>
+      <div class="popup-meta">
+        <div id="popup-date" class="popup-date"></div>
+        <div class="popup-view-count">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span id="popup-views">0</span> views
+        </div>
+      </div>
+    </div>
+    
+    <div class="popup-separator"></div>
+    
+    <div class="popup-subtitle">
+      <span class="popup-subtitle-number" id="popup-subtitle-number"></span>
+      <span id="popup-subtitle-text"></span>
+    </div>
+    
+    <div class="popup-img-container">
+      <img id="popup-img" src="" alt="Promo Image" class="popup-img">
+    </div>
+    
+    <div class="popup-content" id="popup-desc"></div>
+	<button onclick="closePopup()" class="popup-close">Tutup</button>
+
+    
+  </div>
+</div>
+
+
   
  
  
@@ -2398,6 +3055,367 @@ document.addEventListener("click", async function(e) {
 
 
 
+ 
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.progress-dots .dot');
+const progressVertical = document.querySelector('.progress-vertical');
+
+function showSlide(idx) {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle('active', i === idx);
+  });
+
+  dots.forEach((dot, i) => {
+    dot.classList.remove('active');
+    if (i === idx) dot.classList.add('active');
+  });
+
+  // Isi progress vertikal
+  if (progressVertical) {
+    progressVertical.style.height = ((idx + 1) / slides.length * 100) + '%';
+  }
+
+  currentSlide = idx;
+}
+
+function nextSlide() {
+  const next = (currentSlide + 1) % slides.length;
+  showSlide(next);
+}
+
+// Jalankan otomatis setiap 5 detik
+setInterval(nextSlide, 5000);
+
+// Inisialisasi awal
+showSlide(0);
+
+
+
+
+
+
+
+// Fungsi utama untuk membuka popup
+window.openPopup = function({ title, desc, img, subtitle, subtitleNumber }) {
+  const now = new Date();
+  popupOpenedAt = now; // Simpan waktu pembukaan popup
+  
+  // Format tanggal dan waktu
+  const options = { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+  const formattedDate = now.toLocaleDateString('id-ID', options);
+  
+  // Format deskripsi
+  let formattedDesc = formatPopupDescription(desc);
+  
+  // Update elemen popup
+  document.getElementById("popup-title").innerText = title;
+  document.getElementById("popup-date").innerHTML = `${formattedDate} - <span id="popup-relative">Baru saja</span>`;
+  document.getElementById("popup-desc").innerHTML = formattedDesc;
+  document.getElementById("popup-subtitle-text").innerText = subtitle || "";
+  document.getElementById("popup-subtitle-number").innerText = subtitleNumber || "";
+  
+  // Update gambar
+  const imgElement = document.getElementById("popup-img");
+  imgElement.src = img;
+  adjustImageSize(imgElement);
+  
+  // Mulai tracking
+  startPopupViewTracking();
+  startRelativeTimeUpdater(now);
+  
+  // Tampilkan popup
+  document.getElementById("popupAd").style.display = "flex";
+};
+
+
+
+
+// Fungsi untuk memulai tracking view
+function startPopupViewTracking() {
+  // Update view count segera
+  incrementPopupView();
+  
+  // Update view count setiap 30 detik saat popup terbuka
+  popupViewUpdateInterval = setInterval(incrementPopupView, 30000);
+  
+  // Update waktu setiap detik
+  popupTimeUpdateInterval = setInterval(updatePopupTimeDisplay, 1000);
+}
+
+// Fungsi untuk menghentikan tracking
+function stopPopupViewTracking() {
+  clearInterval(popupViewUpdateInterval);
+  clearInterval(popupTimeUpdateInterval);
+}
+
+// Fungsi untuk memperbarui tampilan waktu
+function updatePopupTimeDisplay() {
+  if (!popupOpenedAt) return;
+  
+  const relativeEl = document.getElementById('popup-relative');
+  if (relativeEl) {
+    relativeEl.textContent = getTimeAgoText(popupOpenedAt);
+  }
+}
+
+
+
+// Fungsi untuk menambah view count
+async function incrementPopupView() {
+  const statRef = doc(db, "popupAdViews", "popupAd-main");
+
+  try {
+    // Coba update view count
+    await updateDoc(statRef, {
+      views: increment(1),
+      lastViewed: serverTimestamp()
+    });
+    
+    // Dapatkan data terbaru
+    const snap = await getDoc(statRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      const viewsEl = document.getElementById("popup-views");
+      if (viewsEl) {
+        viewsEl.textContent = data.views || 0;
+      }
+    }
+  } catch (err) {
+    // Jika dokumen belum ada, buat baru
+    await setDoc(statRef, { 
+      views: 1,
+      lastViewed: serverTimestamp()
+    }, { merge: true });
+    
+    const viewsEl = document.getElementById("popup-views");
+    if (viewsEl) viewsEl.textContent = "1";
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+let popupOpenedAt = null;
+  let popupViewUpdateInterval;
+  let popupTimeUpdateInterval;
+
+
+
+
+// Fungsi untuk mendapatkan teks waktu yang lalu
+function getTimeAgoText(date) {
+  const now = new Date();
+  const diffMs = now - date;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 10) return "Baru saja";
+  if (diffSec < 60) return `${diffSec} detik yang lalu`;
+  if (diffMin < 60) return `${diffMin} menit yang lalu`;
+  if (diffHour < 24) return `${diffHour} jam yang lalu`;
+  return `${diffDay} hari yang lalu`;
+}
+  
+  
+  
+  
+    async function updatePopupViewCount() {
+    const statRef = doc(db, "entryStats", "popup-ad");
+    const viewsEl = document.getElementById("popup-views");
+    
+    try {
+      // First try to increment the count
+      await updateDoc(statRef, {
+        views: increment(1),
+        lastViewed: serverTimestamp()
+      });
+      
+      // Then get the updated count
+      const snap = await getDoc(statRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        if (viewsEl) {
+          viewsEl.textContent = data.views || 0;
+        }
+      }
+    } catch (err) {
+      // If document doesn't exist, create it
+      await setDoc(statRef, { 
+        views: 1, 
+        likes: 0,
+        lastViewed: serverTimestamp()
+      }, { merge: true });
+      if (viewsEl) viewsEl.textContent = "1";
+    }
+  }
+
+  
+  
+  
+  function startRelativeTimeUpdater(startTime) {
+  function update() {
+    const now = new Date();
+    const diffMs = now - startTime;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+
+    let text = 'Baru saja';
+    if (diffMin === 0) text = '0 menit yang lalu';
+    else if (diffMin === 1) text = '1 menit yang lalu';
+    else if (diffMin < 60) text = `${diffMin} menit yang lalu`;
+    else if (diffHour === 1) text = '1 jam yang lalu';
+    else text = `${diffHour} jam yang lalu`;
+
+    const el = document.getElementById('popup-relative');
+    if (el) el.textContent = text;
+  }
+
+  update();
+  setInterval(update, 30000); // Update tiap 30 detik
+}
+
+  
+
+
+
+
+
+function openPopupAd() {
+  const popup = document.getElementById('popupAd');
+  popup.style.display = 'flex';
+
+  const title = 'Promo Ilustrasi Digital';
+  const subtitleNumber = '1';
+  const subtitleText = 'Special Offer for New Clients';
+  const desc = '1. Konsultasi GRATIS\n2. Bayar setelah ACC\nInfo lengkap: https://wa.me/62812345678';
+  const img = 'images/popo09.jpeg';
+
+  document.getElementById('popup-title').textContent = title;
+  document.getElementById('popup-subtitle-number').textContent = subtitleNumber;
+  document.getElementById('popup-subtitle-text').textContent = subtitleText;
+  document.getElementById('popup-desc').innerHTML = desc.replace(/\n/g, '<br>');
+  document.getElementById('popup-img').src = img;
+
+  const now = new Date();
+  const formatted = now.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }) + ' pukul ' + now.toLocaleTimeString('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  document.getElementById('popup-date').innerHTML = `${formatted} - <span id="popup-relative">Baru saja</span>`;
+  startRelativeTimeUpdater(now);
+
+  // ========== TAMBAH VIEW AKURAT ==========
+  const adRef = doc(db, 'popupAdViews', 'popupAd-main');
+
+  updateDoc(adRef, { views: increment(1) })
+    .catch(async () => {
+      await setDoc(adRef, { views: 1 }, { merge: true });
+    });
+
+  // Real-time update views
+  onSnapshot(adRef, (snap) => {
+    const data = snap.data();
+    if (data && data.views !== undefined) {
+      document.getElementById('popup-views').textContent = data.views;
+    }
+  });
+}
+
+
+
+// Fungsi untuk memformat deskripsi popup
+function formatPopupDescription(desc) {
+  let formattedDesc = desc;
+  
+  // Format list bernomor
+  formattedDesc = formattedDesc.replace(/(\d+\.\s.+)/g, '<li>$1</li>');
+  formattedDesc = formattedDesc.replace(/<li>/g, '<ol><li>').replace(/<\/li>/g, '</li></ol>');
+  
+  // Format paragraf dan line breaks
+  formattedDesc = formattedDesc.split('\n').map(paragraph => {
+    if (paragraph.startsWith('<ol>') || paragraph.startsWith('</ol>')) {
+      return paragraph;
+    }
+    return `<p>${paragraph}</p>`;
+  }).join('');
+  
+  // Format URL
+  formattedDesc = formattedDesc.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+  
+  return formattedDesc;
+}
+
+
+
+// Fungsi untuk menyesuaikan ukuran gambar
+function adjustImageSize(imgElement) {
+  imgElement.onload = function() {
+    const aspectRatio = this.naturalWidth / this.naturalHeight;
+    if (aspectRatio > 1) {
+      this.style.maxWidth = "100%";
+      this.style.height = "auto";
+    } else {
+      this.style.width = "auto";
+      this.style.maxHeight = "400px";
+    }
+  };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+  function closePopup() {
+    document.getElementById('popupAd').style.display = 'none';
+    stopPopupViewTracking();
+    popupOpenedAt = null;
+  }
+
+  // Update the close button event listener
+  document.querySelector('.popup-close').addEventListener('click', closePopup);
+
+
+
+
+document.getElementById('open-ad-btn')?.addEventListener('click', () => {
+  openPopup({
+    title: 'Jasa Illustration Character',
+    subtitle: 'Special Offer for New Clients',
+    subtitleNumber: '1',
+    desc: '1. Konsultasi GRATIS\n2. Bayar setelah ACC\nInfo lengkap: https://www.instagram.com/krea.loka/',
+    img: 'images/popo09.jpeg'
+  });
+});
 
 
 
