@@ -1606,7 +1606,31 @@ body.dark-mode .image-row img {
 
 
 
+.popup-box ol {
+    padding-left: 25px;
+    margin: 15px 0;
+}
 
+.popup-box ol li {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.popup-box ol li strong {
+    color: #4CAF50;
+}
+
+.popup-box a[target="_blank"] {
+    transition: all 0.3s ease;
+}
+
+.popup-box a[target="_blank"]:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
 
 
 
@@ -1804,6 +1828,8 @@ body.dark-mode .image-row img {
       <p class="slide-description">jasa illustration character <strong style="background: red; padding: 4px 8px; border-radius: 8px;">krealoka</strong>secara profesional.</p>
 <button class="slider-button" id="open-ad-btn" onclick="openPopupAd()">Daftar Sekarang</button>
 </div>
+
+
 
     
     <!-- Slide 2 -->
@@ -3255,7 +3281,6 @@ document.addEventListener("click", async function(e) {
 
 
 
-let popupTimer = null;
  let popupOpenTime = null; // Simpan waktu pembukaan popup
 let currentSlide = 0;
 const slides = document.querySelectorAll('.slide');
@@ -3293,7 +3318,14 @@ showSlide(0);
 
 
 
+let popupTimeUpdateInterval = null;
 
+function stopPopupViewTracking() {
+  if (popupTimeUpdateInterval) {
+    clearInterval(popupTimeUpdateInterval);
+    popupTimeUpdateInterval = null;
+  }
+}
 
 
 
@@ -3301,6 +3333,12 @@ showSlide(0);
 window.openPopup = function({ title, desc, img, subtitle, subtitleNumber }) {
   const now = new Date();
   popupOpenedAt = now; // Simpan waktu pembukaan popup
+  
+   if (!popupOpenedAt) {
+    popupOpenedAt = new Date();
+    localStorage.setItem('popupOpenedAt', popupOpenedAt.toString());
+  }
+  
   
   // Format tanggal dan waktu
   const options = { 
@@ -3350,21 +3388,56 @@ function startPopupViewTracking() {
   popupTimeUpdateInterval = setInterval(updatePopupTimeDisplay, 1000);
 }
 
-// Fungsi untuk menghentikan tracking
-function stopPopupViewTracking() {
-  clearInterval(popupViewUpdateInterval);
-  clearInterval(popupTimeUpdateInterval);
+
+
+
+
+
+ function updatePopupTimeDisplay() {
+    if (!popupOpenTime) return;
+    
+    const now = new Date();
+    const diffMs = now - popupOpenTime;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    let timeAgoText = 'Baru saja';
+    if (diffSec >= 60) timeAgoText = `${diffMin} menit yang lalu`;
+    if (diffMin >= 60) timeAgoText = `${diffHour} jam yang lalu`;
+    if (diffHour >= 24) timeAgoText = `${diffDay} hari yang lalu`;
+    
+    const relativeEl = document.getElementById('popup-relative');
+    if (relativeEl) {
+      relativeEl.textContent = timeAgoText;
+    }
+  }
+
+
+
+
+
+function formatRelative(base) {
+  const diff = Math.floor( (Date.now() - base.getTime()) / 1000 );
+  if (diff < 60)          return `${diff} detik yang lalu`;
+  const m = Math.floor(diff/60);
+  if (m < 60)             return `${m} menit yang lalu`;
+  const h = Math.floor(m/60);
+  if (h < 24)             return `${h} jam yang lalu`;
+  const d = Math.floor(h/24);
+  return `${d} hari yang lalu`;
 }
 
-// Fungsi untuk memperbarui tampilan waktu
-function updatePopupTimeDisplay() {
-  if (!popupOpenedAt) return;
-  
-  const relativeEl = document.getElementById('popup-relative');
-  if (relativeEl) {
-    relativeEl.textContent = getTimeAgoText(popupOpenedAt);
-  }
+function updatePopupRelative() {
+  if (!popupOpenAt) return;
+  document.getElementById('popup-relative').textContent = formatRelative(popupOpenAt);
 }
+
+
+
+
+
 
 
 
@@ -3400,7 +3473,6 @@ async function incrementPopupView() {
   }
 }
 
-
 window.openPopupAd = function () {
   const popup = document.getElementById('popupAd');
   const title = document.getElementById('popup-title');
@@ -3414,42 +3486,56 @@ window.openPopupAd = function () {
   title.textContent = 'Promo Krealoka';
   subtitleNum.textContent = '1';
   subtitleText.textContent = 'Diskon 100%';
-  img.src = 'images/5.jpg';
+  img.src = 'images/popo09.jpeg';
   desc.innerHTML = '<p>Daftar jasa ilustrasi karakter profesional sekarang dan dapatkan konsultasi gratis!</p>';
+
+  // Set waktu buka popup (hanya sekali)
+  const popupOpenTime = new Date();
+
+
+
+
+
+
+
+
+
+  // Fungsi hitung relatif
+  function timeSince(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    return seconds + ' detik lalu';
+  }
+  
+  
+  
+  
 
   // Update waktu setiap detik
   function updatePopupTime() {
-    const now = new Date();
-    date.textContent = now.toLocaleString('id-ID', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    if (!popupOpenTime) return;
+    const popupDateEl = document.getElementById('popup-date');
+    if (popupDateEl) {
+      popupDateEl.textContent = popupOpenTime.toLocaleString('id-ID', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }); 
+    }
+    document.getElementById('popup-relative').textContent = timeSince(popupOpenTime);
   }
 
-  updatePopupTime(); // panggil langsung agar tampil awal
+  updatePopupTime(); // panggil pertama kali
   popup.style.display = 'flex';
   window.popupInterval = setInterval(updatePopupTime, 1000); // update per detik
 }
 
-window.closePopup = function () {
-  document.getElementById('popupAd').style.display = 'none';
-  clearInterval(window.popupInterval);
-}
 
 
 
 
-
-
-
-
-let popupOpenedAt = null;
-  let popupViewUpdateInterval;
-  let popupTimeUpdateInterval;
 
 
 
@@ -3504,8 +3590,6 @@ function getTimeAgoText(date) {
   }
 
   
-  
-  
   function startRelativeTimeUpdater(startTime) {
   function update() {
     const now = new Date();
@@ -3513,32 +3597,33 @@ function getTimeAgoText(date) {
     const diffSec = Math.floor(diffMs / 1000);
     const diffMin = Math.floor(diffSec / 60);
     const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
 
     let text = 'Baru saja';
-    if (diffMin === 0) text = '0 menit yang lalu';
-    else if (diffMin === 1) text = '1 menit yang lalu';
+    if (diffSec < 60) text = `${diffSec} detik yang lalu`;
     else if (diffMin < 60) text = `${diffMin} menit yang lalu`;
-    else if (diffHour === 1) text = '1 jam yang lalu';
-    else text = `${diffHour} jam yang lalu`;
+    else if (diffHour < 24) text = `${diffHour} jam yang lalu`;
+    else text = `${diffDay} hari yang lalu`;
 
     const el = document.getElementById('popup-relative');
     if (el) el.textContent = text;
   }
 
   update();
-  setInterval(update, 30000); // Update tiap 30 detik
+  // Update setiap detik untuk akurasi lebih baik
+  return setInterval(update, 1000);
 }
-
   
+
+
+
+
 
 
 
 function openPopupAd() {
   const popup = document.getElementById('popupAd');
   popup.style.display = 'flex';
-  let popupTimer = null;
- popupOpenTime = new Date(); // hanya set sekali
-  popupTimer = setInterval(updatePopupTime, 1000);
 
   const title = 'Promo Ilustrasi Digital';
   const subtitleNumber = '1';
@@ -3567,10 +3652,22 @@ function openPopupAd() {
 
   const adRef = doc(db, 'popupAdViews', 'popupAd-main');
 
-  updateDoc(adRef, { views: increment(1) })
-    .catch(async () => {
-      await setDoc(adRef, { views: 1 }, { merge: true });
-    });
+  updateDoc(adRef, { views: increment(1) }).catch(async () => {
+    await setDoc(adRef, { views: 1 }, { merge: true });
+  });
+
+  // Cek apakah timestamp sudah diset, kalau belum, set sekarang
+  if (!popupOpenTimestamp) {
+    popupOpenTimestamp = new Date();
+  }
+
+  // Tampilkan waktu relatif di elemen date pop up
+  updatePopupTime();
+
+  // Perbarui setiap 30 detik biar real-time
+  if (!window.popupTimeInterval) {
+    window.popupTimeInterval = setInterval(updatePopupTime, 30000);
+  }
 
   // Real-time update views
   onSnapshot(adRef, (snap) => {
@@ -3579,34 +3676,131 @@ function openPopupAd() {
       document.getElementById('popup-views').textContent = data.views;
     }
   });
-  
+
   // Inisialisasi tampilan & komentar
   setupEntryStats("popup-entry");
   loadComments("popup-entry");
 }
 
-window.openPopupAd = () => {
-  document.getElementById("popupAd").style.display = "flex";
 
-  // Isi konten popup
-  document.getElementById("popup-title").textContent = "Jasa Illustration Character";
-  document.getElementById("popup-date").textContent = "7 Jul 2025";
-  document.getElementById("popup-subtitle-number").textContent = "0%";
-  document.getElementById("popup-subtitle-text").textContent = "Per Konsultasi";
-  document.getElementById("popup-desc").innerHTML = `
-    <p>Jasa pembuatan illustration character secara profesional oleh <strong>Krea Loka</strong>.</p>
-    <p>Hubungi kami via Instagram <a href="https://instagram.com/krea.loka" target="_blank">@krea.loka</a></p>
-  `;
-  document.getElementById("popup-img").src = "images/5.jpg";
 
-  // Jalankan dukungan & komentar
-  setupEntryStats("popup-entry");
-  loadComments("popup-entry");
+let popupCreatedAt = null;
+let popupInterval = null;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+window.openPopupAd = function() {
+    const popup = document.getElementById('popupAd');
+    popup.style.display = 'flex';
+    
+    // Set content
+    document.getElementById('popup-title').innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div>
+                <div style="font-size: 14px; color: #aaa; margin-bottom: 5px;">Farid Ardiansyah · Javascript learn Hobby</div>
+				
+                <div style="font-size: 32px; font-weight: bold;">Jasa Illustration Character</div>
+            </div>
+            <a href="https://www.instagram.com/krea.loka/" target="_blank" style="background: #405DE6; color: white; padding: 6px 12px; border-radius: 20px; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                @krea.loka
+            </a>
+        </div>
+    `;
+    
+    document.getElementById('popup-subtitle-number').textContent = '1';
+    document.getElementById('popup-subtitle-text').textContent = 'Special Offer For New Client';
+    document.getElementById('popup-desc').innerHTML = `
+        <ol>
+            <li><strong>Konsultasi Gratis</strong><br>Diskusi awal tentang konsep karakter tanpa biaya.</li>
+            <li><strong>Proses Mudah</strong><br>Brief → Sketsa → Revisi → Finalisasi.</li>
+            <li><strong>Garansi Revisi</strong><br>x revisi gratis setelah sketsa disetujui.</li>
+            <li><strong>File Lengkap</strong><br>Mendapatkan file: PNG, JPG, PDF.</li>
+            <li><strong>Harga Terjangkau</strong><br>Mulai dari Rp .000 per karakter.</li>
+        </ol>
+        
+        <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;">
+            <p><strong>Contoh Portfolio:</strong></p>
+            <a href="portfolio.pdf" target="_blank" style="display: inline-block; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; margin-top: 10px;">
+                Download PDF Portfolio
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 5px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </a>
+        </div>
+    `;
+    
+    document.getElementById('popup-img').src = 'images/popo09.jpeg';
+    
+    // Record opening time
+    const now = new Date();
+    popupOpenTime = now;
+    
+    // Format the exact time
+    const options = { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    document.getElementById('popup-date').innerHTML = `
+        ${now.toLocaleDateString('id-ID', options)} - 
+        <span id="popup-relative">Baru saja</span>
+    `;
+    
+    // Start updating time display
+    if (popupTimeUpdateInterval) clearInterval(popupTimeUpdateInterval);
+    popupTimeUpdateInterval = setInterval(updatePopupTimeDisplay, 1000);
+    
+    // Update view count
+    updatePopupViewCount();
+    
+    // Initialize comments and likes
+    setupEntryStats("popup-entry");
+    loadComments("popup-entry");
 };
 
-window.closePopup = () => {
-  document.getElementById("popupAd").style.display = "none";
-};
+
+
+
+
+
+
+
+
+
+
+ window.closePopup = function() {
+    document.getElementById('popupAd').style.display = 'none';
+    if (popupTimeUpdateInterval) {
+      clearInterval(popupTimeUpdateInterval);
+      popupTimeUpdateInterval = null;
+    }
+  };
+
 
 
 
@@ -3663,9 +3857,12 @@ function adjustImageSize(imgElement) {
   function closePopup() {
     document.getElementById('popupAd').style.display = 'none';
     stopPopupViewTracking();  }
+	clearInterval(popupTimeInterval);
+  popupTimeInterval = null;
 
   // Update the close button event listener
   document.querySelector('.popup-close').addEventListener('click', closePopup);
+
 
 
 
