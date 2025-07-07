@@ -1451,9 +1451,191 @@
 
 
 
+body.light-mode {
+  background: #fff;
+  color: #000;
+}
+
+body.light-mode .timeline-page {
+  background: #fff;
+  color: #000;
+}
+
+body.light-mode .timeline-page .timeline-content {
+  color: #000;
+}
+
+body.light-mode .timeline::before {
+  background: #ccc;
+}
+
+body.light-mode .timeline-page .comment-section {
+  background: #f0f0f0;
+}
+
+body.light-mode .timeline-page .comment-form input,
+body.light-mode .timeline-page .comment-form textarea {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+body.light-mode .timeline-page .comment {
+  color: #000;
+  border-left-color: #007BFF;
+}
+
+body.light-mode .timeline-page .comment::before,
+body.light-mode .timeline-page .replies::before {
+  background: #007BFF;
+}
+
+body.light-mode .timeline-page .comment-time {
+  color: #555;
+}
+
+body.light-mode .timeline-page .reply-btn {
+  color: #007BFF;
+}
+
+/* halaman 2 */
+body.light-mode .container {
+  background: #fff;
+  color: #000;
+}
+
+body.light-mode .content {
+  background: #f9f9f9;
+  color: #000;
+}
+
+body.light-mode .contact-dark {
+  background: #fff;
+  color: #000;
+}
+
+body.light-mode .contact-dark .contact-item {
+  background: #f9f9f9;
+  border-color: #ccc;
+  color: #000;
+}
+
+body.light-mode .contact-dark .contact-item span,
+body.light-mode .contact-dark .contact-item a,
+body.light-mode .contact-dark .contact-item a svg {
+  color: #000;
+  stroke: #000;
+}
 
 
 
+/* Tambahan light-mode untuk elemen halaman 2 */
+body.light-mode .entry .date {
+  color: #555;
+}
+
+body.light-mode .entry .judul {
+  color: #000;
+}
+
+body.light-mode .line {
+  background: #bbb;
+}
+
+body.light-mode .like-btn {
+  background-color: #ffea00;
+  color: #000;
+}
+
+body.light-mode .comment {
+  background: #fafafa;
+  color: #000;
+  border-left-color: #2196f3;
+}
+
+body.light-mode .comment::before,
+body.light-mode .replies::before {
+  background: #2196f3;
+}
+
+body.light-mode .comment-time {
+  color: #555;
+}
+
+body.light-mode .reply-btn {
+  color: #2196f3;
+}
+
+body.light-mode .image-comment-section {
+  background: #f9f9f9;
+  color: #000;
+}
+
+body.light-mode #fullscreen-comments .comment {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* === DARK MODE STYLING HALAMAN 2 === */
+
+body:not(.light-mode) #page2 {
+  background: #111;
+  color: #fff;
+}
+
+body:not(.light-mode) #page2 .container {
+  background: #111;
+  color: #fff;
+}
+
+body:not(.light-mode) #page2 .entry .date {
+  color: #aaa;
+}
+
+body:not(.light-mode) #page2 .entry .judul {
+  color: #fff;
+}
+
+body:not(.light-mode) #page2 .line {
+  background: #444;
+}
+
+body:not(.light-mode) #page2 .content {
+  background: #222;
+  color: #fff;
+}
+
+body:not(.light-mode) #page2 .comment-section {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+body:not(.light-mode) #page2 .comment-form input,
+body:not(.light-mode) #page2 .comment-form textarea {
+  background: #222;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+body:not(.light-mode) #page2 .comment {
+  background: #2a2a2a;
+  color: #fff;
+  border-left: 3px solid #4CAF50;
+}
+
+body:not(.light-mode) #page2 .comment-time {
+  color: #ccc;
+}
+
+body:not(.light-mode) #page2 .reply-btn {
+  color: #4CAF50;
+}
+
+body:not(.light-mode) #page2 .like-btn {
+  background: #4CAF50;
+  color: #fff;
+}
 
 
 
@@ -1462,7 +1644,8 @@
 
   </style>
 </head>
-<body>
+<body class="dark-mode">
+
 
  <div class="fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreen(event)">
   <div class="fullscreen-content" onclick="event.stopPropagation()">
@@ -1482,6 +1665,23 @@
     </div>
   </div>
 </div>
+
+<button id="theme-toggle" style="
+  position: fixed;
+  top: 20px;
+  left: 80px;
+  z-index: 10000;
+  background: #222;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+">
+  🌙 Mode Gelap
+</button>
+
 
 
   <div id="contact-hover-banner" style="
@@ -3418,6 +3618,22 @@ document.getElementById('open-ad-btn')?.addEventListener('click', () => {
 });
 
 
+const toggleBtn = document.getElementById("theme-toggle");
+const body = document.body;
+
+// Cek preferensi pengguna sebelumnya
+if (localStorage.getItem("theme") === "light") {
+  body.classList.add("light-mode");
+  toggleBtn.textContent = "🌞 Mode Terang";
+}
+
+// Saat tombol diklik
+toggleBtn.addEventListener("click", () => {
+  body.classList.toggle("light-mode");
+  const isLight = body.classList.contains("light-mode");
+  toggleBtn.textContent = isLight ? "🌞 Mode Terang" : "🌙 Mode Gelap";
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+});
 
 
 
