@@ -1577,65 +1577,6 @@ body.light-mode #fullscreen-comments .comment {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* === DARK MODE STYLING HALAMAN 2 === */
-
-body:not(.light-mode) #page2 {
-  background: #111;
-  color: #fff;
-}
-
-body:not(.light-mode) #page2 .container {
-  background: #111;
-  color: #fff;
-}
-
-body:not(.light-mode) #page2 .entry .date {
-  color: #aaa;
-}
-
-body:not(.light-mode) #page2 .entry .judul {
-  color: #fff;
-}
-
-body:not(.light-mode) #page2 .line {
-  background: #444;
-}
-
-body:not(.light-mode) #page2 .content {
-  background: #222;
-  color: #fff;
-}
-
-body:not(.light-mode) #page2 .comment-section {
-  background: #1a1a1a;
-  color: #fff;
-}
-
-body:not(.light-mode) #page2 .comment-form input,
-body:not(.light-mode) #page2 .comment-form textarea {
-  background: #222;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-body:not(.light-mode) #page2 .comment {
-  background: #2a2a2a;
-  color: #fff;
-  border-left: 3px solid #4CAF50;
-}
-
-body:not(.light-mode) #page2 .comment-time {
-  color: #ccc;
-}
-
-body:not(.light-mode) #page2 .reply-btn {
-  color: #4CAF50;
-}
-
-body:not(.light-mode) #page2 .like-btn {
-  background: #4CAF50;
-  color: #fff;
-}
 
 
 
@@ -1886,10 +1827,29 @@ body:not(.light-mode) #page2 .like-btn {
     
     <div class="popup-content" id="popup-desc"></div>
 	<button onclick="closePopup()" class="popup-close">Tutup</button>
+	
+	<div class="support-section" data-id="popup-entry">
+  <div class="view-count">👁️ <span class="view-num">0</span> tayangan</div>
+  <button class="like-btn">👍 Dukung Naik (<span class="like-num">0</span>)</button>
+</div>
+
+<div class="comment-section" data-entry="popup-entry">
+  <h4>Komentar</h4>
+  <form class="comment-form" onsubmit="submitComment(event, 'popup-entry', 'popup')">
+    <input type="text" placeholder="Nama" name="name" required>
+    <textarea name="text" placeholder="Tulis komentar..." required rows="3"></textarea>
+    <input type="hidden" name="parentId" value="">
+    <button type="submit">Kirim</button>
+  </form>
+  <div class="comments-list" id="comments-popup-entry"></div>
+</div>
+
 
     
   </div>
 </div>
+
+
 
 
   
@@ -3542,7 +3502,35 @@ function openPopupAd() {
       document.getElementById('popup-views').textContent = data.views;
     }
   });
+  
+  // Inisialisasi tampilan & komentar
+  setupEntryStats("popup-entry");
+  loadComments("popup-entry");
 }
+
+window.openPopupAd = () => {
+  document.getElementById("popupAd").style.display = "flex";
+
+  // Isi konten popup
+  document.getElementById("popup-title").textContent = "Jasa Illustration Character";
+  document.getElementById("popup-date").textContent = "7 Jul 2025";
+  document.getElementById("popup-subtitle-number").textContent = "0%";
+  document.getElementById("popup-subtitle-text").textContent = "Per Konsultasi";
+  document.getElementById("popup-desc").innerHTML = `
+    <p>Jasa pembuatan illustration character secara profesional oleh <strong>Krea Loka</strong>.</p>
+    <p>Hubungi kami via Instagram <a href="https://instagram.com/krea.loka" target="_blank">@krea.loka</a></p>
+  `;
+  document.getElementById("popup-img").src = "images/5.jpg";
+
+  // Jalankan dukungan & komentar
+  setupEntryStats("popup-entry");
+  loadComments("popup-entry");
+};
+
+window.closePopup = () => {
+  document.getElementById("popupAd").style.display = "none";
+};
+
 
 
 
