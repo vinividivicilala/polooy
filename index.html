@@ -3708,6 +3708,12 @@ let popupInterval = null;
 window.openPopupAd = function() {
     const popup = document.getElementById('popupAd');
     popup.style.display = 'flex';
+	const popupTime = new Date(); // Atau pakai timestamp dari data jika tersedia
+const fullDate = formatFullDate(popupTime);
+const popupDateEl = document.getElementById('popup-date');
+popupDateEl.setAttribute('data-time', popupTime.getTime());
+popupDateEl.textContent = `${fullDate} - ${timeAgo(popupTime)}`;
+
     
     // Set content
     document.getElementById('popup-title').innerHTML = `
@@ -3741,7 +3747,7 @@ window.openPopupAd = function() {
         
         <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;">
             <p><strong>Contoh Portfolio:</strong></p>
-            <a href="portfolio.pdf" target="_blank" style="display: inline-block; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; margin-top: 10px;">
+            <a href="https://drive.google.com/file/d/1Iom7CIyPa0GmJqferOUOo-IbRfzEaFVa/view" target="_blank" style="display: inline-block; background: #4CAF50; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; margin-top: 10px;">
                 Download PDF Portfolio
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 5px;">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -3846,7 +3852,22 @@ function adjustImageSize(imgElement) {
 
 
 
+function formatFullDate(date) {
+  const options = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+  return date.toLocaleString('id-ID', options);
+}
 
+function timeAgo(date) {
+  const now = new Date();
+  const seconds = Math.floor((now - date) / 1000);
+  if (seconds < 60) return 'baru saja';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} menit yang lalu`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} jam yang lalu`;
+  const days = Math.floor(hours / 24);
+  return `${days} hari yang lalu`;
+}
 
 
 
@@ -3886,6 +3907,28 @@ document.getElementById('open-ad-btn')?.addEventListener('click', () => {
     body.classList.toggle('light-mode');
     themeToggle.textContent = body.classList.contains('dark-mode') ? '🌙 Mode Gelap' : '☀️ Mode Terang';
   });
+
+
+setInterval(() => {
+  const timeEl = document.getElementById('popup-date');
+  const relEl = document.getElementById('popup-relative');
+
+  if (timeEl && relEl && timeEl.hasAttribute('data-time')) {
+    const baseTime = new Date(Number(timeEl.getAttribute('data-time')));
+    const now = new Date();
+    const diffSec = Math.floor((now - baseTime) / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    let relativeText = 'Baru saja';
+    if (diffSec >= 60) relativeText = `${diffMin} menit yang lalu`;
+    if (diffMin >= 60) relativeText = `${diffHour} jam yang lalu`;
+    if (diffHour >= 24) relativeText = `${diffDay} hari yang lalu`;
+
+    relEl.textContent = relativeText;
+  }
+}, 60000);
 
 
 
